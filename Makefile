@@ -1,2 +1,2 @@
-doc: uiprompt.lua
-	ldoc $+
+docs: uiprompt.lua
+	ldoc -d $@ $+
