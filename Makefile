@@ -1,0 +1,2 @@
+doc: uiprompt.lua
+	ldoc $+
