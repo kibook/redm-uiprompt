@@ -121,7 +121,7 @@ function Uiprompt:new(controls, text, enabled, group)
 	PromptRegisterEnd(self.handle)
 
 	if not group then
-		UipromptRegister:addPrompt(self)
+		UipromptManager:addPrompt(self)
 	end
 
 	return self
@@ -419,7 +419,7 @@ end
 --- Clean up the prompt
 -- @usage prompt:delete()
 function Uiprompt:delete()
-	UipromptRegister:removePrompt(self)
+	UipromptManager:removePrompt(self)
 
 	PromptDelete(self.handle)
 end
@@ -441,7 +441,7 @@ function UipromptGroup:new(text, active)
 	self.prompts = {}
 	self.active = active == true
 
-	UipromptRegister:addGroup(self)
+	UipromptManager:addGroup(self)
 
 	return self
 end
@@ -750,7 +750,7 @@ end
 --- Clean up all prompts in the prompt group
 -- @usage promptGroup:delete()
 function UipromptGroup:delete()
-	UipromptRegister:removeGroup(self)
+	UipromptManager:removeGroup(self)
 
 	for _, prompt in ipairs(self.prompts) do
 		prompt:delete()
