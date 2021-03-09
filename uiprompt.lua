@@ -44,10 +44,7 @@ function UipromptManager:startEventThread()
 	CreateThread(function()
 		while true do
 			for group, _ in pairs(self.groups) do
-				if group:isActive() then
-					group:setActiveThisFrame()
-					group:handleEvents()
-				end
+				group:handleEvents()
 			end
 
 			for prompt, _ in pairs(self.prompts) do
@@ -430,7 +427,7 @@ UipromptGroup = Class:new()
 
 --- Create a new UI prompt group
 -- @param text The text label for the prompt group
--- @param active Whether the group is active. Default is false.
+-- @param active Whether the group is active. Default is true.
 -- @return A new UipromptGroup object
 -- @usage local promptGroup = UipromptGroup:new("Interact")
 function UipromptGroup:new(text, active)
@@ -439,7 +436,7 @@ function UipromptGroup:new(text, active)
 	self.groupId = GetRandomIntInRange(0, 0xFFFFFF)
 	self.text = text
 	self.prompts = {}
-	self.active = active == true
+	self.active = active ~= false
 
 	UipromptManager:addGroup(self)
 
@@ -681,10 +678,31 @@ function Uiprompt:setOnControlReleased(handler)
 	return self
 end
 
+--- Get whether the group is active.
+-- @return true or false
+-- @usage if promptGroup:isActive() then ... end
+function UipromptGroup:isActive()
+	return self.active
+end
+
+--- Set whether the group is active.
+-- @return true or false
+-- @usage promptGroup:setActive(true)
+function UipromptGroup:setActive(toggle)
+	self.active = toggle
+	return self
+end
+
 --- Handle events for all prompts in the group (should be called every frame)
 -- @param data Extra data passed to the event handlers for each prompt
 -- @usage promptGroup:handleEvents()
 function UipromptGroup:handleEvents(data)
+	if not self:isActive() then
+		return
+	end
+
+	self:setActiveThisFrame()
+
 	for _, prompt in ipairs(self.prompts) do
 		if self.onJustPressed and prompt:isJustPressed() then
 			self:onJustPressed(prompt, data)
@@ -732,18 +750,13 @@ function UipromptGroup:handleEvents(data)
 	end
 end
 
---- Get whether the group is active.
--- @return true or false
--- @usage if promptGroup:isActive() then ... end
-function UipromptGroup:isActive()
-	return self.active
-end
-
---- Set whether the group is active.
--- @return true or false
--- @usage promptGroup:setActive(true)
-function UipromptGroup:setActive(toggle)
-	self.active = toggle
+--- Enable or disable all prompts in the group.
+-- @param toggle true to enable, false to disable
+-- @usage promptGroup:setEnabled(false)
+function UipromptGroup:setEnabled(toggle)
+	for _, prompt in ipairs(self.prompts) do
+		prompt:setEnabled(toggle)
+	end
 	return self
 end
 
