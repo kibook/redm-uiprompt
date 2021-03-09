@@ -1,55 +1,46 @@
 --- UI prompts and prompt groups
 
--- Internal system for automatically handling and cleaning up prompts and groups.
-local UipromptRegister = {
-	initialized = false,
-	prompts = {},
-	groups = {}
-}
+-- Base class from which other classes are derived
+local Class = {}
 
-function UipromptRegister:addPrompt(prompt)
-	if not self.initialized then
-		self:initialize()
-	end
+function Class:new()
+	self.__index = self
+	return setmetatable({}, self)
+end
 
+--- System for automatically handling and cleaning up prompts and groups.
+-- @table UipromptManager
+UipromptManager = Class:new()
+UipromptManager.prompts = {}
+UipromptManager.groups = {}
+
+-- Register a prompt
+function UipromptManager:addPrompt(prompt)
 	self.prompts[prompt] = true
 end
 
-function UipromptRegister:removePrompt(object)
+-- Remove a prompt
+function UipromptManager:removePrompt(object)
 	if self.prompts[prompt] then
 		self.prompts[prompt] = nil
 	end
 end
 
-function UipromptRegister:addGroup(group)
-	if not self.initialized then
-		self:initialize()
-	end
-
+-- Register a group
+function UipromptManager:addGroup(group)
 	self.groups[group] = true
 end
 
-function UipromptRegister:removeGroup(group)
+-- Remove a group
+function UipromptManager:removeGroup(group)
 	if self.groups[group] then
 		self.groups[group] = nil
 	end
 end
 
-function UipromptRegister:initialize()
-	self.initialized = true
-
-	AddEventHandler("onResourceStop", function(resourceName)
-		if GetCurrentResourceName() == resourceName then
-			for group, _ in pairs(self.groups) do
-				group:delete()
-			end
-
-			for prompt, _ in pairs(self.prompts) do
-				prompt:delete()
-			end
-		end
-	end)
-
+--- Start event handling thread
+-- @usage UipromptManager:startEventThread()
+function UipromptManager:startEventThread()
 	CreateThread(function()
 		while true do
 			for group, _ in pairs(self.groups) do
@@ -68,13 +59,23 @@ function UipromptRegister:initialize()
 	end)
 end
 
--- Base class from which other classes are derived
-local Class = {}
+-- Clean up all registered prompts and groups
+function UipromptManager:delete()
+	for group, _ in pairs(UipromptManager.groups) do
+		group:delete()
+	end
 
-function Class:new()
-	self.__index = self
-	return setmetatable({}, self)
+	for prompt, _ in pairs(UipromptManager.prompts) do
+		prompt:delete()
+	end
 end
+
+-- Automatically clean up when resource stops
+AddEventHandler("onResourceStop", function(resourceName)
+	if GetCurrentResourceName() == resourceName then
+		UipromptManager:delete()
+	end
+end)
 
 --- A single UI prompt
 -- @table Uiprompt

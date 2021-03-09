@@ -42,3 +42,5 @@ end)
 RegisterCommand("uiprompt_test", function(source, args, raw)
 	testGroup:setActive(not testGroup:isActive())
 end)
+
+UipromptManager:startEventThread()

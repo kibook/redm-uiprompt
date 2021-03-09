@@ -6,3 +6,5 @@ promptGroup:addPrompt(`INPUT_RELOAD`, "Test 2")
 promptGroup:setOnControlJustPressed(function(group, prompt)
 	TriggerEvent("chat:addMessage", {args={"You pressed " .. prompt:getText() .. "!"}})
 end)
+
+UipromptManager:startEventThread()

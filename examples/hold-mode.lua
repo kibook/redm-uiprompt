@@ -20,3 +20,5 @@ end)
 prompt:setOnHoldModeCompleted(function(prompt)
 	DrawText("Hold completed!", 0.5, 0.5)
 end)
+
+UipromptManager:startEventThread()
