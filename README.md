@@ -4,7 +4,7 @@ Object-oriented library for UI prompts in RedM.
 
 ## installing
 
-1. Create a folder called `uiprompts` in your resources directory.
+1. Create a folder called `uiprompt` in your resources directory.
 2. Copy `fxmanifest.lua` and `uiprompt.lua` to this folder.
 3. Add `start uiprompt` to `server.cfg`.
 
