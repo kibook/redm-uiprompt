@@ -600,7 +600,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group was just pressed.
 -- @param handler Handler function
--- @usage promptGroup:setOnJustPressed(function(prompt, data) ... end)
+-- @usage promptGroup:setOnJustPressed(function(group, prompt, data) ... end)
 function UipromptGroup:setOnJustPressed(handler)
 	self.onJustPressed = handler
 	return self
@@ -608,7 +608,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group was just released.
 -- @param handler Handler function
--- @usage promptGroup:setOnJustReleased(function(prompt, data) ... end)
+-- @usage promptGroup:setOnJustReleased(function(group, prompt, data) ... end)
 function UipromptGroup:setOnJustReleased(handler)
 	self.onJustReleased = handler
 	return self
@@ -616,7 +616,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group is pressed.
 -- @param handler Handler function
--- @usage promptGroup:setOnPressed(function(prompt, data) ... end)
+-- @usage promptGroup:setOnPressed(function(group, prompt, data) ... end)
 function UipromptGroup:setOnPressed(handler)
 	self.onPressed = handler
 	return self
@@ -624,7 +624,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group is released.
 -- @param handler Handler function
--- @usage promptGroup:setOnReleased(function(prompt, data) ... end)
+-- @usage promptGroup:setOnReleased(function(group, prompt, data) ... end)
 function UipromptGroup:setOnReleased(handler)
 	self.onReleased = handler
 	return self
@@ -632,7 +632,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group is running its hold mode.
 -- @param handler Handler function
--- @usage promptGroup:setOnHoldModeRunning(function(prompt, data) ... end)
+-- @usage promptGroup:setOnHoldModeRunning(function(group, prompt, data) ... end)
 function UipromptGroup:setOnHoldModeRunning(handler)
 	self.onHoldModeRunning = handler
 	return self
@@ -640,7 +640,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group has completed its hold mode.
 -- @param handler Handler function
--- @usage promptGroup:setOnHoldModeCompleted(function(prompt, data) ... end)
+-- @usage promptGroup:setOnHoldModeCompleted(function(group, prompt, data) ... end)
 function UipromptGroup:setOnHoldModeCompleted(handler)
 	self.onHoldModeCompleted = handler
 	return self
@@ -648,7 +648,7 @@ end
 
 --- Set a handler that is executed when any control of any prompt in the group was just pressed.
 -- @param handler Handler function
--- @usage promptGroup:setOnControlJustPressed(function(prompt, data) ... end)
+-- @usage promptGroup:setOnControlJustPressed(function(group, prompt, data) ... end)
 function UipromptGroup:setOnControlJustPressed(handler)
 	self.onControlJustPressed = handler
 	return self
@@ -656,7 +656,7 @@ end
 
 --- Set a handler that is executed when any control of any prompt in the group was just released.
 -- @param handler Handler function
--- @usage promptGroup:setOnControlJustReleased(function(prompt, data) ... end)
+-- @usage promptGroup:setOnControlJustReleased(function(group, prompt, data) ... end)
 function UipromptGroup:setOnControlJustReleased(handler)
 	self.onControlJustReleased = handler
 	return self
@@ -664,7 +664,7 @@ end
 
 --- Set a handler that is executed when any control of any prompt in the group is pressed.
 -- @param handler Handler function
--- @usage promptGroup:setOnControlPressed(function(prompt, data) ... end)
+-- @usage promptGroup:setOnControlPressed(function(group, prompt, data) ... end)
 function UipromptGroup:setOnControlPressed(handler)
 	self.onControlPressed = handler
 	return self
@@ -672,7 +672,7 @@ end
 
 --- Set a handler that is executed when any control of any prompt in the group is released.
 -- @param handler Handler function
--- @usage promptGroup:setOnControlReleased(function(prompt, data) ... end)
+-- @usage promptGroup:setOnControlReleased(function(group, prompt, data) ... end)
 function Uiprompt:setOnControlReleased(handler)
 	self.onControlReleased = handler
 	return self
