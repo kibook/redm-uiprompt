@@ -286,6 +286,25 @@ function Uiprompt:isControlJustReleased(padIndex)
 	return self:doForEachControl(IsControlJustReleased, padIndex)
 end
 
+--- Enable all control actions associated with the prompt.
+-- @param padIndex
+-- @usage prompt:enableControlAction(0)
+function Uiprompt:enableControlAction(padIndex)
+	for _, control in ipairs(self.controls) do
+		EnableControlAction(padInex, control, true)
+	end
+	return self
+end
+
+--- Disable all control actions associated with the prompt.
+-- @param padIndex
+-- @usage prompt:disableControlAction(0)
+function Uiprompt:disableControlAction(padIndex)
+	for _, control in ipairs(self.controls) do
+		DisableControlAction(padIndex, control, true)
+	end
+end
+
 --- Set a handler that is executed when the prompt was just pressed.
 -- @param handler Handler function
 -- @usage prompt:setOnJustPressed(function(prompt, data) ... end)
@@ -578,6 +597,26 @@ end
 -- @usage promptGroup:isControlJustReleased(0, function(prompt) ... end)
 function UipromptGroup:isControlJustReleased(padIndex, callback)
 	return self:doForEachPrompt(Uiprompt.doForEachControl, {IsControlJustReleased, padIndex}, callback)
+end
+
+--- Enable all control actions of all prompts in the group.
+-- @param padIndex
+-- @usage promptGroup:enableControlAction(0)
+function UipromptGroup:enableControlAction(padIndex)
+	for _, prompt in ipairs(self.prompts) do
+		prompt:enableControlAction(padIndex)
+	end
+	return self
+end
+
+--- Disable all control actions of all prompts in the group.
+-- @param padIndex
+-- @usage promptGroup:disableControlAction(0)
+function UipromptGroup:disableControlAction(padIndex)
+	for _, prompt in ipairs(self.prompts) do
+		prompt:disableControlAction(padIndex)
+	end
+	return self
 end
 
 --- Check if the hold mode of any of the prompts in the group is running.
