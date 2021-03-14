@@ -41,6 +41,7 @@
 <h2>Examples</h2>
 <ul class="nowrap">
   <li><a href="examples/custom-thread.lua.html">custom-thread.lua</a></li>
+  <li><a href="examples/hold-mode-just-completed.lua.html">hold-mode-just-completed.lua</a></li>
   <li><a href="examples/hold-mode.lua.html">hold-mode.lua</a></li>
   <li><a href="examples/multiple-controls.lua.html">multiple-controls.lua</a></li>
   <li><a href="examples/prompt-group.lua.html">prompt-group.lua</a></li>
@@ -117,11 +118,15 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:isHoldModeRunning">Uiprompt:isHoldModeRunning ()</a></td>
-	<td class="summary">Check if the prompt's hold mode bar is filling up.</td>
+	<td class="summary">Check if the prompt's hold mode is running.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:hasHoldModeCompleted">Uiprompt:hasHoldModeCompleted ()</a></td>
-	<td class="summary">Check if the prompt's hold mode bar is filled.</td>
+	<td class="summary">Check if the prompt's hold mode is completed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:hasHoldModeJustCompleted">Uiprompt:hasHoldModeJustCompleted ()</a></td>
+	<td class="summary">Check if the prompt's hold mode was just completed.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:getText">Uiprompt:getText ()</a></td>
@@ -196,7 +201,11 @@
 	<td class="summary">Set a handler that is executed when the prompt's hold mode has completed.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Uiprompt:handleEvents">Uiprompt:handleEvents (data)</a></td>
+	<td class="name" nowrap><a href="#Uiprompt:setOnHoldModeJustCompleted">Uiprompt:setOnHoldModeJustCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when the prompt's hold mode has just completed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:handleEvents">Uiprompt:handleEvents (...)</a></td>
 	<td class="summary">Handle events for this prompt.</td>
 	</tr>
 	<tr>
@@ -276,6 +285,10 @@
 	<td class="summary">Check if the hold mode of any of the prompts in the group has completed.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:hasHoldModeJustCompleted">UipromptGroup:hasHoldModeJustCompleted (callback)</a></td>
+	<td class="summary">Check if the hold mode of any of the prompts in the group has just completed.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:setOnJustPressed">UipromptGroup:setOnJustPressed (handler)</a></td>
 	<td class="summary">Set a handler that is executed when any prompt in the group was just pressed.</td>
 	</tr>
@@ -298,6 +311,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:setOnHoldModeCompleted">UipromptGroup:setOnHoldModeCompleted (handler)</a></td>
 	<td class="summary">Set a handler that is executed when any prompt in the group has completed its hold mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:setOnHoldModeJustCompleted">UipromptGroup:setOnHoldModeJustCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when any prompt in the group has just completed its hold mode.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:setOnControlJustPressed">UipromptGroup:setOnControlJustPressed (handler)</a></td>
@@ -324,7 +341,7 @@
 	<td class="summary">Set whether the group is active.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#UipromptGroup:handleEvents">UipromptGroup:handleEvents (data)</a></td>
+	<td class="name" nowrap><a href="#UipromptGroup:handleEvents">UipromptGroup:handleEvents (...)</a></td>
 	<td class="summary">Handle events for all prompts in the group (should be called every frame)</td>
 	</tr>
 	<tr>
@@ -687,7 +704,7 @@
     <strong>Uiprompt:isHoldModeRunning ()</strong>
     </dt>
     <dd>
-    Check if the prompt's hold mode bar is filling up.
+    Check if the prompt's hold mode is running.
 
 
 
@@ -706,7 +723,26 @@
     <strong>Uiprompt:hasHoldModeCompleted ()</strong>
     </dt>
     <dd>
-    Check if the prompt's hold mode bar is filled.
+    Check if the prompt's hold mode is completed.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true or false
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:hasHoldModeJustCompleted"></a>
+    <strong>Uiprompt:hasHoldModeJustCompleted ()</strong>
+    </dt>
+    <dd>
+    Check if the prompt's hold mode was just completed.
 
 
 
@@ -951,7 +987,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnJustPressed(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnJustPressed(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -975,7 +1011,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnJustReleased(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnJustReleased(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -999,7 +1035,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnPressed(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnPressed(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1023,7 +1059,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnReleased(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnReleased(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1047,7 +1083,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnControlPressed(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnControlPressed(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1071,7 +1107,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnControlReleased(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnControlReleased(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1095,7 +1131,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnControlJustPressed(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnControlJustPressed(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1119,7 +1155,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnControlJustReleased(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnControlJustReleased(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1143,7 +1179,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnHoldModeRunning(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnHoldModeRunning(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1167,13 +1203,37 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">prompt:setOnHoldModeCompleted(<span class="keyword">function</span>(prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">prompt:setOnHoldModeCompleted(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:setOnHoldModeJustCompleted"></a>
+    <strong>Uiprompt:setOnHoldModeJustCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when the prompt's hold mode has just completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">prompt:setOnHoldModeCompleted(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
     <dt>
     <a name = "Uiprompt:handleEvents"></a>
-    <strong>Uiprompt:handleEvents (data)</strong>
+    <strong>Uiprompt:handleEvents (...)</strong>
     </dt>
     <dd>
     Handle events for this prompt.  Should be called every frame.
@@ -1181,8 +1241,8 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">data</span>
-         Extra data passed to the handlers for any events
+        <li><span class="parameter">...</span>
+         Variable number of extra arguments passed to the handlers for any events.
         </li>
     </ul>
 
@@ -1729,6 +1789,36 @@
 
 </dd>
     <dt>
+    <a name = "UipromptGroup:hasHoldModeJustCompleted"></a>
+    <strong>UipromptGroup:hasHoldModeJustCompleted (callback)</strong>
+    </dt>
+    <dd>
+    Check if the hold mode of any of the prompts in the group has just completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+         An optional callback function that is executed for each prompt who's hold mode has just completed.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true or false
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="keyword">if</span> promptGroup:hasHoldModeJustCompleted() <span class="keyword">then</span> ... <span class="keyword">end</span></pre></li>
+        <li><pre class="example">promptGroup:hasHoldModeJustCompleted(<span class="keyword">function</span>(prompt) ... <span class="keyword">end</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "UipromptGroup:setOnJustPressed"></a>
     <strong>UipromptGroup:setOnJustPressed (handler)</strong>
     </dt>
@@ -1748,7 +1838,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnJustPressed(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnJustPressed(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1772,7 +1862,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnJustReleased(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnJustReleased(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1796,7 +1886,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnPressed(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnPressed(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1820,7 +1910,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnReleased(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnReleased(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1844,7 +1934,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnHoldModeRunning(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnHoldModeRunning(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1868,7 +1958,31 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnHoldModeCompleted(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnHoldModeCompleted(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "UipromptGroup:setOnHoldModeJustCompleted"></a>
+    <strong>UipromptGroup:setOnHoldModeJustCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when any prompt in the group has just completed its hold mode.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">promptGroup:setOnHoldModeJustCompleted(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1892,7 +2006,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnControlJustPressed(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnControlJustPressed(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1916,7 +2030,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnControlJustReleased(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnControlJustReleased(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1940,7 +2054,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnControlPressed(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnControlPressed(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1964,7 +2078,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">promptGroup:setOnControlReleased(<span class="keyword">function</span>(group, prompt, data) ... <span class="keyword">end</span>)</pre>
+        <pre class="example">promptGroup:setOnControlReleased(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -2022,7 +2136,7 @@
 </dd>
     <dt>
     <a name = "UipromptGroup:handleEvents"></a>
-    <strong>UipromptGroup:handleEvents (data)</strong>
+    <strong>UipromptGroup:handleEvents (...)</strong>
     </dt>
     <dd>
     Handle events for all prompts in the group (should be called every frame)
@@ -2030,8 +2144,8 @@
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">data</span>
-         Extra data passed to the event handlers for each prompt
+        <li><span class="parameter">...</span>
+         Variable number of extra arguments passed to the handlers for any events.
         </li>
     </ul>
 
@@ -2139,7 +2253,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2021-03-12 21:29:43 </i>
+<i style="float:right;">Last updated 2021-03-13 19:44:39 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

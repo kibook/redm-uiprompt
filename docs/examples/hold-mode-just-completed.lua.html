@@ -32,10 +32,10 @@
 <h2>Examples</h2>
 <ul class="nowrap">
   <li><a href="../examples/custom-thread.lua.html">custom-thread.lua</a></li>
-  <li><a href="../examples/hold-mode-just-completed.lua.html">hold-mode-just-completed.lua</a></li>
+  <li><strong>hold-mode-just-completed.lua</strong></li>
   <li><a href="../examples/hold-mode.lua.html">hold-mode.lua</a></li>
   <li><a href="../examples/multiple-controls.lua.html">multiple-controls.lua</a></li>
-  <li><strong>prompt-group.lua</strong></li>
+  <li><a href="../examples/prompt-group.lua.html">prompt-group.lua</a></li>
   <li><a href="../examples/single-prompt.lua.html">single-prompt.lua</a></li>
   <li><a href="../examples/test.lua.html">test.lua</a></li>
 </ul>
@@ -48,15 +48,15 @@
 
 <div id="content">
 
-    <h2>prompt-group.lua</h2>
+    <h2>hold-mode-just-completed.lua</h2>
 <pre>
 <span class="keyword">local</span> promptGroup = UipromptGroup:new(<span class="string">"Test"</span>)
 
-promptGroup:addPrompt(<span class="backtick">`INPUT_DYNAMIC_SCENARIO`</span>, <span class="string">"Test 1"</span>)
-promptGroup:addPrompt(<span class="backtick">`INPUT_RELOAD`</span>, <span class="string">"Test 2"</span>)
+promptGroup:addPrompt(<span class="backtick">`INPUT_DYNAMIC_SCENARIO`</span>, <span class="string">"Test 1"</span>):setHoldMode(<span class="keyword">true</span>)
+promptGroup:addPrompt(<span class="backtick">`INPUT_RELOAD`</span>, <span class="string">"Test 2"</span>):setHoldMode(<span class="keyword">true</span>)
 
-promptGroup:setOnControlJustPressed(<span class="keyword">function</span>(group, prompt)
-	TriggerEvent(<span class="string">"chat:addMessage"</span>, {args={<span class="string">"You pressed "</span> .. prompt:getText() .. <span class="string">"!"</span>}})
+promptGroup:setOnHoldModeJustCompleted(<span class="keyword">function</span>(group, prompt)
+	TriggerEvent(<span class="string">"chat:addMessage"</span>, {args={<span class="string">"You held "</span> .. prompt:getText() .. <span class="string">"!"</span>}})
 <span class="keyword">end</span>)
 
 UipromptManager:startEventThread()</pre>
