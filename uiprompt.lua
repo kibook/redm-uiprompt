@@ -214,16 +214,35 @@ function Uiprompt:setHoldMode(toggle)
 	return self
 end
 
---- Check if the prompt's hold mode bar is filling up.
+--- Check if the prompt's hold mode is running.
 -- @return true or false
 function Uiprompt:isHoldModeRunning()
 	return PromptIsHoldModeRunning(self.handle)
 end
 
---- Check if the prompt's hold mode bar is filled.
+--- Check if the prompt's hold mode is completed.
 -- @return true or false
 function Uiprompt:hasHoldModeCompleted()
 	return PromptHasHoldModeCompleted(self.handle)
+end
+
+--- Check if the prompt's hold mode was just completed.
+-- @return true or false
+function Uiprompt:hasHoldModeJustCompleted()
+	if self.awaitingHoldModeEnd then
+		if not self:isHoldModeRunning() then
+			self.awaitingHoldModeEnd = false
+		end
+
+		return false
+	else
+		if self:hasHoldModeCompleted() then
+			self.awaitingHoldModeEnd = true
+			return true
+		else
+			return false
+		end
+	end
 end
 
 --- Get the text label of the prompt.
@@ -385,6 +404,14 @@ function Uiprompt:setOnHoldModeCompleted(handler)
 	return self
 end
 
+--- Set a handler that is executed when the prompt's hold mode has just completed.
+-- @param handler Handler function
+-- @usage prompt:setOnHoldModeCompleted(function(prompt, data) ... end)
+function Uiprompt:setOnHoldModeJustCompleted(handler)
+	self.onHoldModeJustCompleted = handler
+	return self
+end
+
 --- Handle events for this prompt. Should be called every frame.
 -- @param data Extra data passed to the handlers for any events
 -- @usage prompt:handleEvents()
@@ -411,6 +438,10 @@ function Uiprompt:handleEvents(data)
 
 	if self.onHoldModeCompleted and self:hasHoldModeCompleted() then
 		self:onHoldModeCompleted(data)
+	end
+
+	if self.onHoldModeJustCompleted and self:hasHoldModeJustCompleted() then
+		self:onHoldModeJustCompleted(data)
 	end
 
 	if self:isEnabled() then
@@ -637,6 +668,15 @@ function UipromptGroup:hasHoldModeCompleted(callback)
 	return self:doForEachPrompt(Uiprompt.hasHoldModeCompleted, {}, callback)
 end
 
+--- Check if the hold mode of any of the prompts in the group has just completed.
+-- @param callback An optional callback function that is executed for each prompt who's hold mode has just completed.
+-- @return true or false
+-- @usage if promptGroup:hasHoldModeJustCompleted() then ... end
+-- @usage promptGroup:hasHoldModeJustCompleted(function(prompt) ... end)
+function UipromptGroup:hasHoldModeJustCompleted(callback)
+	return self:doForEachPrompt(Uiprompt.hasHoldModeJustCompleted, {}, callback)
+end
+
 --- Set a handler that is executed when any prompt in the group was just pressed.
 -- @param handler Handler function
 -- @usage promptGroup:setOnJustPressed(function(group, prompt, data) ... end)
@@ -682,6 +722,14 @@ end
 -- @usage promptGroup:setOnHoldModeCompleted(function(group, prompt, data) ... end)
 function UipromptGroup:setOnHoldModeCompleted(handler)
 	self.onHoldModeCompleted = handler
+	return self
+end
+
+--- Set a handler that is executed when any prompt in the group has just completed its hold mode.
+-- @param handler Handler function
+-- @usage promptGroup:setOnHoldModeJustCompleted(function(group, prompt, data) ... end)
+function UipromptGroup:setOnHoldModeJustCompleted(handler)
+	self.onHoldModeJustCompleted = handler
 	return self
 end
 
@@ -765,6 +813,10 @@ function UipromptGroup:handleEvents(data)
 
 		if self.onHoldModeCompleted and prompt:hasHoldModeCompleted() then
 			self:onHoldModeCompleted(prompt, data)
+		end
+
+		if self.onHoldModeJustCompleted and prompt:hasHoldModeJustCompleted() then
+			self:onHoldModeJustCompleted(prompt, data)
 		end
 
 		if prompt:isEnabled() then
