@@ -31,13 +31,13 @@
 
 <h2>Examples</h2>
 <ul class="nowrap">
-  <li><a href="../examples/cooldown.lua.html">cooldown.lua</a></li>
+  <li><strong>cooldown.lua</strong></li>
   <li><a href="../examples/custom-thread.lua.html">custom-thread.lua</a></li>
   <li><a href="../examples/hold-mode-just-completed.lua.html">hold-mode-just-completed.lua</a></li>
   <li><a href="../examples/hold-mode.lua.html">hold-mode.lua</a></li>
   <li><a href="../examples/multiple-controls.lua.html">multiple-controls.lua</a></li>
   <li><a href="../examples/prompt-group.lua.html">prompt-group.lua</a></li>
-  <li><strong>single-prompt.lua</strong></li>
+  <li><a href="../examples/single-prompt.lua.html">single-prompt.lua</a></li>
   <li><a href="../examples/test.lua.html">test.lua</a></li>
 </ul>
 <h2>Modules</h2>
@@ -49,12 +49,33 @@
 
 <div id="content">
 
-    <h2>single-prompt.lua</h2>
+    <h2>cooldown.lua</h2>
 <pre>
-<span class="keyword">local</span> prompt = Uiprompt:new(<span class="backtick">`INPUT_DYNAMIC_SCENARIO`</span>, <span class="string">"Test"</span>)
+<span class="keyword">local</span> promptGroup = UipromptGroup:new(<span class="string">"Test"</span>)
 
-prompt:setOnControlJustPressed(<span class="keyword">function</span>()
-	TriggerEvent(<span class="string">"chat:addMessage"</span>, {args={<span class="string">"Pressed!"</span>}})
+<span class="keyword">local</span> prompt1 = promptGroup:addPrompt(<span class="backtick">`INPUT_DYNAMIC_SCENARIO`</span>, <span class="string">"Test 1"</span>)
+prompt1:setHoldMode(<span class="keyword">true</span>)
+prompt1.cooldown = <span class="number">10</span>
+
+<span class="keyword">local</span> prompt2 = promptGroup:addPrompt(<span class="backtick">`INPUT_RELOAD`</span>, <span class="string">"Test 2"</span>)
+prompt2:setHoldMode(<span class="keyword">true</span>)
+prompt2.cooldown = <span class="number">5</span>
+
+promptGroup:setOnHoldModeJustCompleted(<span class="keyword">function</span>(group, prompt)
+	CreateThread(<span class="keyword">function</span>()
+		<span class="keyword">local</span> text = prompt:getText()
+
+		prompt:setEnabled(<span class="keyword">false</span>)
+
+		<span class="keyword">for</span> secs = prompt.cooldown, <span class="number">1</span>, -<span class="number">1</span> <span class="keyword">do</span>
+			prompt:setText(text .. <span class="string">" ("</span> .. secs .. <span class="string">"s)"</span>)
+			Wait(<span class="number">1000</span>)
+		<span class="keyword">end</span>
+
+		prompt:setText(text)
+
+		prompt:setEnabled(<span class="keyword">true</span>)
+	<span class="keyword">end</span>)
 <span class="keyword">end</span>)
 
 UipromptManager:startEventThread()</pre>
