@@ -326,7 +326,7 @@ end
 
 --- Set a handler that is executed when the prompt was just pressed.
 -- @param handler Handler function
--- @usage prompt:setOnJustPressed(function(prompt, data) ... end)
+-- @usage prompt:setOnJustPressed(function(prompt, ...) ... end)
 function Uiprompt:setOnJustPressed(handler)
 	self.onJustPressed = handler
 	return self
@@ -334,7 +334,7 @@ end
 
 --- Set a handler that is executed when the prompt was just released.
 -- @param handler Handler function
--- @usage prompt:setOnJustReleased(function(prompt, data) ... end)
+-- @usage prompt:setOnJustReleased(function(prompt, ...) ... end)
 function Uiprompt:setOnJustReleased(handler)
 	self.onJustReleased = handler
 	return self
@@ -342,7 +342,7 @@ end
 
 --- Set a handler that is executed when the prompt is pressed.
 -- @param handler Handler function
--- @usage prompt:setOnPressed(function(prompt, data) ... end)
+-- @usage prompt:setOnPressed(function(prompt, ...) ... end)
 function Uiprompt:setOnPressed(handler)
 	self.onPressed = handler
 	return self
@@ -350,7 +350,7 @@ end
 
 --- Set a handler that is executed when the prompt is released.
 -- @param handler Handler function
--- @usage prompt:setOnReleased(function(prompt, data) ... end)
+-- @usage prompt:setOnReleased(function(prompt, ...) ... end)
 function Uiprompt:setOnReleased(handler)
 	self.onReleased = handler
 	return self
@@ -358,7 +358,7 @@ end
 
 --- Set a handler that is executed when any control associated with the prompt is pressed.
 -- @param handler Handler function
--- @usage prompt:setOnControlPressed(function(prompt, data) ... end)
+-- @usage prompt:setOnControlPressed(function(prompt, ...) ... end)
 function Uiprompt:setOnControlPressed(handler)
 	self.onControlPressed = handler
 	return self
@@ -366,7 +366,7 @@ end
 
 --- Set a handler that is executed when any control associated with the prompt is released.
 -- @param handler Handler function
--- @usage prompt:setOnControlReleased(function(prompt, data) ... end)
+-- @usage prompt:setOnControlReleased(function(prompt, ...) ... end)
 function Uiprompt:setOnControlReleased(handler)
 	self.onControlReleased = handler
 	return self
@@ -374,7 +374,7 @@ end
 
 --- Set a handler that is executed when any control associated with the prompt was just pressed.
 -- @param handler Handler function
--- @usage prompt:setOnControlJustPressed(function(prompt, data) ... end)
+-- @usage prompt:setOnControlJustPressed(function(prompt, ...) ... end)
 function Uiprompt:setOnControlJustPressed(handler)
 	self.onControlJustPressed = handler
 	return self
@@ -382,7 +382,7 @@ end
 
 --- Set a handler that is executed when any control associated with the prompt was just released.
 -- @param handler Handler function
--- @usage prompt:setOnControlJustReleased(function(prompt, data) ... end)
+-- @usage prompt:setOnControlJustReleased(function(prompt, ...) ... end)
 function Uiprompt:setOnControlJustReleased(handler)
 	self.onControlJustReleased = handler
 	return self
@@ -390,7 +390,7 @@ end
 
 --- Set a handler that is executed when the prompt's hold mode is running.
 -- @param handler Handler function
--- @usage prompt:setOnHoldModeRunning(function(prompt, data) ... end)
+-- @usage prompt:setOnHoldModeRunning(function(prompt, ...) ... end)
 function Uiprompt:setOnHoldModeRunning(handler)
 	self.onHoldModeRunning = handler
 	return self
@@ -398,7 +398,7 @@ end
 
 --- Set a handler that is executed when the prompt's hold mode has completed.
 -- @param handler Handler function
--- @usage prompt:setOnHoldModeCompleted(function(prompt, data) ... end)
+-- @usage prompt:setOnHoldModeCompleted(function(prompt, ...) ... end)
 function Uiprompt:setOnHoldModeCompleted(handler)
 	self.onHoldModeCompleted = handler
 	return self
@@ -406,59 +406,59 @@ end
 
 --- Set a handler that is executed when the prompt's hold mode has just completed.
 -- @param handler Handler function
--- @usage prompt:setOnHoldModeCompleted(function(prompt, data) ... end)
+-- @usage prompt:setOnHoldModeCompleted(function(prompt, ...) ... end)
 function Uiprompt:setOnHoldModeJustCompleted(handler)
 	self.onHoldModeJustCompleted = handler
 	return self
 end
 
 --- Handle events for this prompt. Should be called every frame.
--- @param data Extra data passed to the handlers for any events
+-- @param ... Variable number of extra arguments passed to the handlers for any events.
 -- @usage prompt:handleEvents()
-function Uiprompt:handleEvents(data)
+function Uiprompt:handleEvents(...)
 	if self.onJustPressed and self:isJustPressed() then
-		self:onJustPressed(data)
+		self:onJustPressed(...)
 	end
 
 	if self.onJustReleased and self:isJustReleased() then
-		self:onJustReleased(data)
+		self:onJustReleased(...)
 	end
 
 	if self.onPressed and self:isPressed() then
-		self:onPressed(data)
+		self:onPressed(...)
 	end
 
 	if self.onReleased and self:isReleased() then
-		self:onReleased(data)
+		self:onReleased(...)
 	end
 
 	if self.onHoldModeRunning and self:isHoldModeRunning() then
-		self:onHoldModeRunning(data)
+		self:onHoldModeRunning(...)
 	end
 
 	if self.onHoldModeCompleted and self:hasHoldModeCompleted() then
-		self:onHoldModeCompleted(data)
+		self:onHoldModeCompleted(...)
 	end
 
 	if self.onHoldModeJustCompleted and self:hasHoldModeJustCompleted() then
-		self:onHoldModeJustCompleted(data)
+		self:onHoldModeJustCompleted(...)
 	end
 
 	if self:isEnabled() then
 		if self.onControlPressed and self:isControlPressed(0) then
-			self:onControlPressed(data)
+			self:onControlPressed(...)
 		end
 
 		if self.onControlReleased and self:isControlReleased(0) then
-			self:onControlReleased(data)
+			self:onControlReleased(...)
 		end
 
 		if self.onControlJustPressed and self:isControlJustPressed(0) then
-			self:onControlJustPressed(data)
+			self:onControlJustPressed(...)
 		end
 
 		if self.onControlJustReleased and self:isControlJustReleased(0) then
-			self:onControlJustReleased(data)
+			self:onControlJustReleased(...)
 		end
 	end
 end
@@ -679,7 +679,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group was just pressed.
 -- @param handler Handler function
--- @usage promptGroup:setOnJustPressed(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnJustPressed(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnJustPressed(handler)
 	self.onJustPressed = handler
 	return self
@@ -687,7 +687,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group was just released.
 -- @param handler Handler function
--- @usage promptGroup:setOnJustReleased(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnJustReleased(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnJustReleased(handler)
 	self.onJustReleased = handler
 	return self
@@ -695,7 +695,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group is pressed.
 -- @param handler Handler function
--- @usage promptGroup:setOnPressed(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnPressed(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnPressed(handler)
 	self.onPressed = handler
 	return self
@@ -703,7 +703,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group is released.
 -- @param handler Handler function
--- @usage promptGroup:setOnReleased(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnReleased(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnReleased(handler)
 	self.onReleased = handler
 	return self
@@ -711,7 +711,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group is running its hold mode.
 -- @param handler Handler function
--- @usage promptGroup:setOnHoldModeRunning(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnHoldModeRunning(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnHoldModeRunning(handler)
 	self.onHoldModeRunning = handler
 	return self
@@ -719,7 +719,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group has completed its hold mode.
 -- @param handler Handler function
--- @usage promptGroup:setOnHoldModeCompleted(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnHoldModeCompleted(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnHoldModeCompleted(handler)
 	self.onHoldModeCompleted = handler
 	return self
@@ -727,7 +727,7 @@ end
 
 --- Set a handler that is executed when any prompt in the group has just completed its hold mode.
 -- @param handler Handler function
--- @usage promptGroup:setOnHoldModeJustCompleted(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnHoldModeJustCompleted(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnHoldModeJustCompleted(handler)
 	self.onHoldModeJustCompleted = handler
 	return self
@@ -735,7 +735,7 @@ end
 
 --- Set a handler that is executed when any control of any prompt in the group was just pressed.
 -- @param handler Handler function
--- @usage promptGroup:setOnControlJustPressed(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnControlJustPressed(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnControlJustPressed(handler)
 	self.onControlJustPressed = handler
 	return self
@@ -743,7 +743,7 @@ end
 
 --- Set a handler that is executed when any control of any prompt in the group was just released.
 -- @param handler Handler function
--- @usage promptGroup:setOnControlJustReleased(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnControlJustReleased(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnControlJustReleased(handler)
 	self.onControlJustReleased = handler
 	return self
@@ -751,7 +751,7 @@ end
 
 --- Set a handler that is executed when any control of any prompt in the group is pressed.
 -- @param handler Handler function
--- @usage promptGroup:setOnControlPressed(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnControlPressed(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnControlPressed(handler)
 	self.onControlPressed = handler
 	return self
@@ -759,7 +759,7 @@ end
 
 --- Set a handler that is executed when any control of any prompt in the group is released.
 -- @param handler Handler function
--- @usage promptGroup:setOnControlReleased(function(group, prompt, data) ... end)
+-- @usage promptGroup:setOnControlReleased(function(group, prompt, ...) ... end)
 function Uiprompt:setOnControlReleased(handler)
 	self.onControlReleased = handler
 	return self
@@ -781,9 +781,9 @@ function UipromptGroup:setActive(toggle)
 end
 
 --- Handle events for all prompts in the group (should be called every frame)
--- @param data Extra data passed to the event handlers for each prompt
+-- @param ... Variable number of extra arguments passed to the handlers for any events.
 -- @usage promptGroup:handleEvents()
-function UipromptGroup:handleEvents(data)
+function UipromptGroup:handleEvents(...)
 	if not self:isActive() then
 		return
 	end
@@ -792,52 +792,52 @@ function UipromptGroup:handleEvents(data)
 
 	for _, prompt in ipairs(self.prompts) do
 		if self.onJustPressed and prompt:isJustPressed() then
-			self:onJustPressed(prompt, data)
+			self:onJustPressed(prompt, ...)
 		end
 
 		if self.onJustReleased and prompt:isJustReleased() then
-			self:onJustReleased(prompt, data)
+			self:onJustReleased(prompt, ...)
 		end
 
 		if self.onPressed and prompt:isPressed() then
-			self:onPressed(prompt, data)
+			self:onPressed(prompt, ...)
 		end
 
 		if self.onReleased and prompt:isReleased() then
-			self:onReleased(prompt, data)
+			self:onReleased(prompt, ...)
 		end
 
 		if self.onHoldModeRunning and prompt:isHoldModeRunning() then
-			self:onHoldModeRunning(prompt, data)
+			self:onHoldModeRunning(prompt, ...)
 		end
 
 		if self.onHoldModeCompleted and prompt:hasHoldModeCompleted() then
-			self:onHoldModeCompleted(prompt, data)
+			self:onHoldModeCompleted(prompt, ...)
 		end
 
 		if self.onHoldModeJustCompleted and prompt:hasHoldModeJustCompleted() then
-			self:onHoldModeJustCompleted(prompt, data)
+			self:onHoldModeJustCompleted(prompt, ...)
 		end
 
 		if prompt:isEnabled() then
 			if self.onControlJustPressed and prompt:isControlJustPressed(0) then
-				self:onControlJustPressed(prompt, data)
+				self:onControlJustPressed(prompt, ...)
 			end
 
 			if self.onControlJustReleased and prompt:isControlJustReleased(0) then
-				self:onControlJustReleased(prompt, data)
+				self:onControlJustReleased(prompt, ...)
 			end
 
 			if self.onControlPressed and prompt:isControlPressed(0) then
-				self:onControlPressed(prompt, data)
+				self:onControlPressed(prompt, ...)
 			end
 
 			if self.onControlReleased and prompt:isControlReleased(0) then
-				self:onControlReleased(prompt, data)
+				self:onControlReleased(prompt, ...)
 			end
 		end
 
-		prompt:handleEvents(data)
+		prompt:handleEvents(...)
 	end
 end
 
