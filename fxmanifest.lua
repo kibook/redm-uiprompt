@@ -2,13 +2,20 @@ fx_version "adamant"
 game "rdr3"
 rdr3_warning "I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships."
 
-client_script "uiprompt.lua"
+files {
+	"uiprompt.lua"
+}
 
---client_script "examples/single-prompt.lua"
---client_script "examples/multiple-controls.lua"
---client_script "examples/prompt-group.lua"
---client_script "examples/hold-mode.lua"
---client_script "examples/hold-mode-just-completed.lua"
---client_script "examples/custom-thread.lua"
---client_script "examples/cooldown.lua"
---client_script "examples/test.lua"
+--[[
+client_scripts {
+	"uiprompt.lua",
+	--"examples/single-prompt.lua",
+	--"examples/multiple-controls.lua",
+	--"examples/prompt-group.lua",
+	--"examples/hold-mode.lua",
+	--"examples/hold-mode-just-completed.lua",
+	--"examples/custom-thread.lua",
+	--"examples/cooldown.lua",
+	--"examples/test.lua",
+}
+]]
