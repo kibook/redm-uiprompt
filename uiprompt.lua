@@ -181,6 +181,14 @@ function Uiprompt:setVisible(toggle)
 	return self
 end
 
+--- Enable/disable and toggle visibility of the prompt.
+-- @param toggle true to enable and show, false to disable and hide
+function Uiprompt:setEnabledAndVisible(toggle)
+	self:setEnabled(toggle)
+	self:setVisible(toggle)
+	return self
+end
+
 --- Check if prompt was just pressed.
 -- @return true or false
 -- @usage if prompt:isJustPressed() then ... end
