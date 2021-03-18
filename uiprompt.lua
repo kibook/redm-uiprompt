@@ -47,7 +47,13 @@ function UipromptManager:removeGroup(group)
 	end
 end
 
---- Start event handling thread
+--- Start an automatic event handling thread for all prompts and prompt groups.
+--
+-- To use a custom thread instead, call @{Uiprompt:handleEvents} or
+-- @{UipromptGroup:handleEvents} every frame. This can be more efficient and
+-- also allows passing extra data to any event handlers as arguments to these
+-- methods.
+--
 -- @usage UipromptManager:startEventThread()
 function UipromptManager:startEventThread()
 	CreateThread(function()
@@ -65,7 +71,7 @@ function UipromptManager:startEventThread()
 	end)
 end
 
--- Clean up all registered prompts and groups
+-- Clean up all registered prompts and groups.
 function UipromptManager:delete()
 	for group, _ in pairs(UipromptManager.groups) do
 		group:delete()
@@ -76,23 +82,23 @@ function UipromptManager:delete()
 	end
 end
 
--- Automatically clean up when resource stops
+-- Automatically clean up when resource stops.
 AddEventHandler("onResourceStop", function(resourceName)
 	if GetCurrentResourceName() == resourceName then
 		UipromptManager:delete()
 	end
 end)
 
---- A single UI prompt
+--- A single UI prompt.
 -- @table Uiprompt
 Uiprompt = Class:new()
 
---- Create a new UI prompt
--- @param controls An individual control or a table of controls associated with the prompt.
+--- Create a new UI prompt.
+-- @param controls An individual control or a table of controls associated with the prompt. The control name can be given as a string or hash.
 -- @param text The text label of the prompt.
--- @param enabled Whether the prompt is enabled. Default is true.
+-- @param enabled Whether the prompt is enabled and visible immediately. Default is true.
 -- @param group An optional group ID to add the prompt to a prompt group.
--- @return A new Uiprompt object
+-- @return A new Uiprompt object.
 -- @usage local prompt = Uiprompt:new(`INPUT_DYNAMIC_SCENARIO`, "Use")
 function Uiprompt:new(controls, text, enabled, group)
 	local self = getmetatable(self).new(self)
