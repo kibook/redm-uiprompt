@@ -1,5 +1,14 @@
 --- UI prompts and prompt groups
 
+-- Treat 0 return value of some natives as falsey
+local function toboolean(value)
+	if not value or value == 0 then
+		return false
+	else
+		return true
+	end
+end
+
 -- Base class from which other classes are derived
 local Class = {}
 
@@ -148,7 +157,7 @@ end
 -- @return true or false
 -- @usage if prompt:isEnabled() then ... end
 function Uiprompt:isEnabled()
-	return PromptIsEnabled(self.handle)
+	return toboolean(PromptIsEnabled(self.handle))
 end
 
 --- Enable or disable the prompt.
