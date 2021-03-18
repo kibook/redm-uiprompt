@@ -439,35 +439,35 @@ end
 -- @param ... Variable number of extra arguments passed to the handlers for any events.
 -- @usage prompt:handleEvents()
 function Uiprompt:handleEvents(...)
-	if self.onJustPressed and self:isJustPressed() then
-		self:onJustPressed(...)
-	end
-
-	if self.onJustReleased and self:isJustReleased() then
-		self:onJustReleased(...)
-	end
-
-	if self.onPressed and self:isPressed() then
-		self:onPressed(...)
-	end
-
-	if self.onReleased and self:isReleased() then
-		self:onReleased(...)
-	end
-
-	if self.onHoldModeRunning and self:isHoldModeRunning() then
-		self:onHoldModeRunning(...)
-	end
-
-	if self.onHoldModeCompleted and self:hasHoldModeCompleted() then
-		self:onHoldModeCompleted(...)
-	end
-
-	if self.onHoldModeJustCompleted and self:hasHoldModeJustCompleted() then
-		self:onHoldModeJustCompleted(...)
-	end
-
 	if self:isEnabled() then
+		if self.onJustPressed and self:isJustPressed() then
+			self:onJustPressed(...)
+		end
+
+		if self.onJustReleased and self:isJustReleased() then
+			self:onJustReleased(...)
+		end
+
+		if self.onPressed and self:isPressed() then
+			self:onPressed(...)
+		end
+
+		if self.onReleased and self:isReleased() then
+			self:onReleased(...)
+		end
+
+		if self.onHoldModeRunning and self:isHoldModeRunning() then
+			self:onHoldModeRunning(...)
+		end
+
+		if self.onHoldModeCompleted and self:hasHoldModeCompleted() then
+			self:onHoldModeCompleted(...)
+		end
+
+		if self.onHoldModeJustCompleted and self:hasHoldModeJustCompleted() then
+			self:onHoldModeJustCompleted(...)
+		end
+
 		if self.onControlPressed and self:isControlPressed(0) then
 			self:onControlPressed(...)
 		end
@@ -814,35 +814,35 @@ function UipromptGroup:handleEvents(...)
 	self:setActiveThisFrame()
 
 	for _, prompt in ipairs(self.prompts) do
-		if self.onJustPressed and prompt:isJustPressed() then
-			self:onJustPressed(prompt, ...)
-		end
-
-		if self.onJustReleased and prompt:isJustReleased() then
-			self:onJustReleased(prompt, ...)
-		end
-
-		if self.onPressed and prompt:isPressed() then
-			self:onPressed(prompt, ...)
-		end
-
-		if self.onReleased and prompt:isReleased() then
-			self:onReleased(prompt, ...)
-		end
-
-		if self.onHoldModeRunning and prompt:isHoldModeRunning() then
-			self:onHoldModeRunning(prompt, ...)
-		end
-
-		if self.onHoldModeCompleted and prompt:hasHoldModeCompleted() then
-			self:onHoldModeCompleted(prompt, ...)
-		end
-
-		if self.onHoldModeJustCompleted and prompt:hasHoldModeJustCompleted() then
-			self:onHoldModeJustCompleted(prompt, ...)
-		end
-
 		if prompt:isEnabled() then
+			if self.onJustPressed and prompt:isJustPressed() then
+				self:onJustPressed(prompt, ...)
+			end
+
+			if self.onJustReleased and prompt:isJustReleased() then
+				self:onJustReleased(prompt, ...)
+			end
+
+			if self.onPressed and prompt:isPressed() then
+				self:onPressed(prompt, ...)
+			end
+
+			if self.onReleased and prompt:isReleased() then
+				self:onReleased(prompt, ...)
+			end
+
+			if self.onHoldModeRunning and prompt:isHoldModeRunning() then
+				self:onHoldModeRunning(prompt, ...)
+			end
+
+			if self.onHoldModeCompleted and prompt:hasHoldModeCompleted() then
+				self:onHoldModeCompleted(prompt, ...)
+			end
+
+			if self.onHoldModeJustCompleted and prompt:hasHoldModeJustCompleted() then
+				self:onHoldModeJustCompleted(prompt, ...)
+			end
+
 			if self.onControlJustPressed and prompt:isControlJustPressed(0) then
 				self:onControlJustPressed(prompt, ...)
 			end
@@ -858,9 +858,9 @@ function UipromptGroup:handleEvents(...)
 			if self.onControlReleased and prompt:isControlReleased(0) then
 				self:onControlReleased(prompt, ...)
 			end
-		end
 
-		prompt:handleEvents(...)
+			prompt:handleEvents(...)
+		end
 	end
 end
 
