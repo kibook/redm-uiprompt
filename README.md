@@ -2,6 +2,12 @@
 
 Object-oriented library for UI prompts in RedM.
 
+## features
+
+- Simplified prompt creation with the `Uiprompt` and `UipromptGroup` classes
+- Callbacks for prompt events such as `onControlJustPressed` and `onHoldModeJustCompleted`.
+- Automatic cleanup of prompts
+
 ## installing
 
 1. Create a folder called `uiprompt` in your resources directory.
@@ -18,9 +24,24 @@ game "rdr3"
 rdr3_warning "I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships."
 
 client_scripts {
-  "@uiprompt/uiprompt.lua",
-  "client.lua"
+	"@uiprompt/uiprompt.lua",
+	"client.lua"
 }
 ```
 
-Documentation and code examples are provided here: https://kibook.github.io/redm-uiprompt
+## example
+
+```lua
+local promptGroup = UipromptGroup:new("Test")
+
+promptGroup:addPrompt(`INPUT_DYNAMIC_SCENARIO`, "Test 1"):setHoldMode(true)
+promptGroup:addPrompt(`INPUT_RELOAD`, "Test 2"):setHoldMode(true)
+
+promptGroup:setOnHoldModeJustCompleted(function(group, prompt)
+	TriggerEvent("chat:addMessage", {args={"You held " .. prompt:getText() .. "!"}})
+end)
+
+UipromptManager:startEventThread()
+```
+
+Further documentation and code examples are provided here: https://kibook.github.io/redm-uiprompt
