@@ -5,7 +5,7 @@ Object-oriented library for UI prompts in RedM.
 ## features
 
 - Simplified prompt creation with the `Uiprompt` and `UipromptGroup` classes
-- Callbacks for prompt events such as `onControlJustPressed` and `onHoldModeJustCompleted`.
+- Callbacks for prompt events such as `onControlJustPressed` and `onHoldModeJustCompleted`
 - Automatic cleanup of prompts
 
 ## installing
