@@ -56,7 +56,7 @@ end
 --
 -- @usage UipromptManager:startEventThread()
 function UipromptManager:startEventThread()
-	CreateThread(function()
+	Citizen.CreateThread(function()
 		while true do
 			for group, _ in pairs(self.groups) do
 				group:handleEvents()
@@ -66,7 +66,7 @@ function UipromptManager:startEventThread()
 				prompt:handleEvents()
 			end
 
-			Wait(0)
+			Citizen.Wait(0)
 		end
 	end)
 end
