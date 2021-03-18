@@ -226,12 +226,14 @@ end
 
 --- Get whether this prompt has hold mode enabled.
 -- @return true or false
+-- @usage if prompt:hasHoldMode() then ... end
 function Uiprompt:hasHoldMode()
 	return PromptHasHoldMode(self.handle)
 end
 
 --- Toggle hold mode on the prompt.
 -- @param toggle true to enable hold mode, false to disable
+-- @usage prompt:setHoldMode(true)
 function Uiprompt:setHoldMode(toggle)
 	PromptSetHoldMode(self.handle, toggle)
 	return self
@@ -239,18 +241,21 @@ end
 
 --- Check if the prompt's hold mode is running.
 -- @return true or false
+-- @usage if prompt:isHoldModeRunning() then ... end
 function Uiprompt:isHoldModeRunning()
 	return PromptIsHoldModeRunning(self.handle)
 end
 
 --- Check if the prompt's hold mode is completed.
 -- @return true or false
+-- @usage if prompt:hasHoldModeCompleted() then ... end
 function Uiprompt:hasHoldModeCompleted()
 	return PromptHasHoldModeCompleted(self.handle)
 end
 
 --- Check if the prompt's hold mode was just completed.
 -- @return true or false
+-- @usage if prompt:hasHoldModeJustCompleted() then ... end
 function Uiprompt:hasHoldModeJustCompleted()
 	if self.awaitingHoldModeEnd then
 		if not self:isHoldModeRunning() then
