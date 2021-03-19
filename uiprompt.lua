@@ -126,8 +126,7 @@ function Uiprompt:new(controls, text, enabled, group)
 	end
 
 	if enabled == false then
-		self:setEnabled(false)
-		self:setVisible(false)
+		self:setEnabledAndVisible(false)
 	end
 
 	PromptRegisterEnd(self.handle)
