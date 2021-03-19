@@ -134,6 +134,26 @@
 	<td class="summary">Check if the prompt's hold mode was just completed.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:setMashMode">Uiprompt:setMashMode (count)</a></td>
+	<td class="summary">Set mash mode on the prompt.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:setMashIndefinitelyMode">Uiprompt:setMashIndefinitelyMode ()</a></td>
+	<td class="summary">Set indefinite mash mode on the prompt.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:hasMashMode">Uiprompt:hasMashMode ()</a></td>
+	<td class="summary">Get whether the prompt is using mash mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:hasMashModeCompleted">Uiprompt:hasMashModeCompleted ()</a></td>
+	<td class="summary">Get whether the prompt's mash mode has completed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:hasMashModeJustCompleted">Uiprompt:hasMashModeJustCompleted ()</a></td>
+	<td class="summary">Get whether the prompt's mash mode was just completed.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:getText">Uiprompt:getText ()</a></td>
 	<td class="summary">Get the text label of the prompt.</td>
 	</tr>
@@ -208,6 +228,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:setOnHoldModeJustCompleted">Uiprompt:setOnHoldModeJustCompleted (handler)</a></td>
 	<td class="summary">Set a handler that is executed when the prompt's hold mode has just completed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:setOnMashModeCompleted">Uiprompt:setOnMashModeCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when the prompt's mash mode has completed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:setOnMashModeJustCompleted">Uiprompt:setOnMashModeJustCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when the prompt's mash mode has just completed.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:handleEvents">Uiprompt:handleEvents (...)</a></td>
@@ -294,6 +322,14 @@
 	<td class="summary">Check if the hold mode of any of the prompts in the group has just completed.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:hasMashModeCompleted">UipromptGroup:hasMashModeCompleted (callback)</a></td>
+	<td class="summary">Check if the mash mode of any of the prompts in the group has completed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:hasMashModeJustCompleted">UipromptGroup:hasMashModeJustCompleted (callback)</a></td>
+	<td class="summary">Check if the mash mode of any of the prompts in the group has just completed.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:setOnJustPressed">UipromptGroup:setOnJustPressed (handler)</a></td>
 	<td class="summary">Set a handler that is executed when any prompt in the group was just pressed.</td>
 	</tr>
@@ -320,6 +356,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:setOnHoldModeJustCompleted">UipromptGroup:setOnHoldModeJustCompleted (handler)</a></td>
 	<td class="summary">Set a handler that is executed when any prompt in the group has just completed its hold mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:setOnMashModeCompleted">UipromptGroup:setOnMashModeCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when any prompt in the group has completed its mash mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:setOnMashModeJustCompleted">UipromptGroup:setOnMashModeJustCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when any prompt in the group has just completed its mash mode.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:setOnControlJustPressed">UipromptGroup:setOnControlJustPressed (handler)</a></td>
@@ -807,6 +851,117 @@
 
 </dd>
     <dt>
+    <a name = "Uiprompt:setMashMode"></a>
+    <strong>Uiprompt:setMashMode (count)</strong>
+    </dt>
+    <dd>
+    Set mash mode on the prompt.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">count</span>
+         The number of times the prompt must be mashed in order to complete.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">prompt:setMashMode(<span class="number">10</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:setMashIndefinitelyMode"></a>
+    <strong>Uiprompt:setMashIndefinitelyMode ()</strong>
+    </dt>
+    <dd>
+    Set indefinite mash mode on the prompt.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">prompt:setMashIndefinitelyMode()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:hasMashMode"></a>
+    <strong>Uiprompt:hasMashMode ()</strong>
+    </dt>
+    <dd>
+    Get whether the prompt is using mash mode.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true or false
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">if</span> prompt:hasMashMode() <span class="keyword">then</span> ... <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:hasMashModeCompleted"></a>
+    <strong>Uiprompt:hasMashModeCompleted ()</strong>
+    </dt>
+    <dd>
+    Get whether the prompt's mash mode has completed.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true or false
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">if</span> prompt:hasMashModeCompleted() <span class="keyword">then</span> ... <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:hasMashModeJustCompleted"></a>
+    <strong>Uiprompt:hasMashModeJustCompleted ()</strong>
+    </dt>
+    <dd>
+    Get whether the prompt's mash mode was just completed.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true or false
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">if</span> prompt:hasMashModeJustCompleted() <span class="keyword">then</span> ... <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "Uiprompt:getText"></a>
     <strong>Uiprompt:getText ()</strong>
     </dt>
@@ -1278,6 +1433,54 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example">prompt:setOnHoldModeCompleted(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:setOnMashModeCompleted"></a>
+    <strong>Uiprompt:setOnMashModeCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when the prompt's mash mode has completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">prompt:setOnMashModeCompleted(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:setOnMashModeJustCompleted"></a>
+    <strong>Uiprompt:setOnMashModeJustCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when the prompt's mash mode has just completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">prompt:setOnMashModeJustCompleted(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -1869,6 +2072,66 @@
 
 </dd>
     <dt>
+    <a name = "UipromptGroup:hasMashModeCompleted"></a>
+    <strong>UipromptGroup:hasMashModeCompleted (callback)</strong>
+    </dt>
+    <dd>
+    Check if the mash mode of any of the prompts in the group has completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+         An optional callback function that is executed for each prompt who's mash mode has completed.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true or false
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="keyword">if</span> promptGroup:hasMashModeCompleted() <span class="keyword">then</span> ... <span class="keyword">end</span></pre></li>
+        <li><pre class="example">promptGroup:hasMashModeCompleted(<span class="keyword">function</span>(prompt) ... <span class="keyword">end</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "UipromptGroup:hasMashModeJustCompleted"></a>
+    <strong>UipromptGroup:hasMashModeJustCompleted (callback)</strong>
+    </dt>
+    <dd>
+    Check if the mash mode of any of the prompts in the group has just completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+         An optional callback function that is executed for each prompt who's mash mode has just completed.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true or false
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="keyword">if</span> promptGroup:hasMashModeJustCompleted() <span class="keyword">then</span> ... <span class="keyword">end</span></pre></li>
+        <li><pre class="example">promptGroup:hasMashModeJustCompleted(<span class="keyword">function</span>(prompt) ... <span class="keyword">end</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "UipromptGroup:setOnJustPressed"></a>
     <strong>UipromptGroup:setOnJustPressed (handler)</strong>
     </dt>
@@ -2033,6 +2296,54 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example">promptGroup:setOnHoldModeJustCompleted(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "UipromptGroup:setOnMashModeCompleted"></a>
+    <strong>UipromptGroup:setOnMashModeCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when any prompt in the group has completed its mash mode.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">promptGroup:setOnMashModeCompleted(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "UipromptGroup:setOnMashModeJustCompleted"></a>
+    <strong>UipromptGroup:setOnMashModeJustCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when any prompt in the group has just completed its mash mode.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">promptGroup:setOnMashModeJustCompleted(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -2303,7 +2614,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2021-03-18 14:35:41 </i>
+<i style="float:right;">Last updated 2021-03-18 23:00:41 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

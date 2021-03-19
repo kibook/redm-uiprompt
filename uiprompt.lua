@@ -273,6 +273,55 @@ function Uiprompt:hasHoldModeJustCompleted()
 	end
 end
 
+--- Set mash mode on the prompt.
+-- @param count The number of times the prompt must be mashed in order to complete.
+-- @usage prompt:setMashMode(10)
+function Uiprompt:setMashMode(count)
+	PromptSetMashMode(self.handle, count)
+	return self
+end
+
+--- Set indefinite mash mode on the prompt.
+-- @usage prompt:setMashIndefinitelyMode()
+function Uiprompt:setMashIndefinitelyMode()
+	PromptSetMashIndefinitelyMode(self.handle)
+	return self
+end
+
+--- Get whether the prompt is using mash mode.
+-- @return true or false
+-- @usage if prompt:hasMashMode() then ... end
+function Uiprompt:hasMashMode()
+	return PromptHasMashMode(self.handle)
+end
+
+--- Get whether the prompt's mash mode has completed.
+-- @return true or false
+-- @usage if prompt:hasMashModeCompleted() then ... end
+function Uiprompt:hasMashModeCompleted()
+	return PromptHasMashModeCompleted(self.handle)
+end
+
+--- Get whether the prompt's mash mode was just completed.
+-- @return true or false
+-- @usage if prompt:hasMashModeJustCompleted() then ... end
+function Uiprompt:hasMashModeJustCompleted()
+	if self.awaitingMashModeEnd then
+		if not self:hasMashModeCompleted() then
+			self.awaitingMashModeEnd = false
+		end
+
+		return false
+	else
+		if self:hasMashModeCompleted() then
+			self.awaitingMashModeEnd = true
+			return true
+		else
+			return false
+		end
+	end
+end
+
 --- Get the text label of the prompt.
 -- @return The text label of the UI prompt
 -- @usage local text = prompt:getText()
@@ -440,6 +489,22 @@ function Uiprompt:setOnHoldModeJustCompleted(handler)
 	return self
 end
 
+--- Set a handler that is executed when the prompt's mash mode has completed.
+-- @param handler Handler function
+-- @usage prompt:setOnMashModeCompleted(function(prompt, ...) ... end)
+function Uiprompt:setOnMashModeCompleted(handler)
+	self.onMashModeCompleted = handler
+	return self
+end
+
+--- Set a handler that is executed when the prompt's mash mode has just completed.
+-- @param handler Handler function
+-- @usage prompt:setOnMashModeJustCompleted(function(prompt, ...) ... end)
+function Uiprompt:setOnMashModeJustCompleted(handler)
+	self.onMashModeJustCompleted = handler
+	return self
+end
+
 --- Handle events for this prompt. Should be called every frame.
 -- @param ... Variable number of extra arguments passed to the handlers for any events.
 -- @usage prompt:handleEvents()
@@ -471,6 +536,14 @@ function Uiprompt:handleEvents(...)
 
 		if self.onHoldModeJustCompleted and self:hasHoldModeJustCompleted() then
 			self:onHoldModeJustCompleted(...)
+		end
+
+		if self.onMashModeCompleted and self:hasMashModeCompleted() then
+			self:onMashModeCompleted(...)
+		end
+
+		if self.onMashModeJustCompleted and self:hasMashModeJustCompleted() then
+			self:onMashModeJustCompleted(...)
 		end
 
 		if self.onControlPressed and self:isControlPressed(0) then
@@ -705,6 +778,24 @@ function UipromptGroup:hasHoldModeJustCompleted(callback)
 	return self:doForEachPrompt(Uiprompt.hasHoldModeJustCompleted, {}, callback)
 end
 
+--- Check if the mash mode of any of the prompts in the group has completed.
+-- @param callback An optional callback function that is executed for each prompt who's mash mode has completed.
+-- @return true or false
+-- @usage if promptGroup:hasMashModeCompleted() then ... end
+-- @usage promptGroup:hasMashModeCompleted(function(prompt) ... end)
+function UipromptGroup:hasMashModeCompleted(callback)
+	return self:doForEachPrompt(Uiprompt.hasMashModeCompleted, {}, callback)
+end
+
+--- Check if the mash mode of any of the prompts in the group has just completed.
+-- @param callback An optional callback function that is executed for each prompt who's mash mode has just completed.
+-- @return true or false
+-- @usage if promptGroup:hasMashModeJustCompleted() then ... end
+-- @usage promptGroup:hasMashModeJustCompleted(function(prompt) ... end)
+function UipromptGroup:hasMashModeJustCompleted(callback)
+	return self:doForEachPrompt(Uiprompt.hasMashModeJustCompleted, {}, callback)
+end
+
 --- Set a handler that is executed when any prompt in the group was just pressed.
 -- @param handler Handler function
 -- @usage promptGroup:setOnJustPressed(function(group, prompt, ...) ... end)
@@ -758,6 +849,22 @@ end
 -- @usage promptGroup:setOnHoldModeJustCompleted(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnHoldModeJustCompleted(handler)
 	self.onHoldModeJustCompleted = handler
+	return self
+end
+
+--- Set a handler that is executed when any prompt in the group has completed its mash mode.
+-- @param handler Handler function
+-- @usage promptGroup:setOnMashModeCompleted(function(group, prompt, ...) ... end)
+function UipromptGroup:setOnMashModeCompleted(handler)
+	self.onMashModeCompleted = handler
+	return self
+end
+
+--- Set a handler that is executed when any prompt in the group has just completed its mash mode.
+-- @param handler Handler function
+-- @usage promptGroup:setOnMashModeJustCompleted(function(group, prompt, ...) ... end)
+function UipromptGroup:setOnMashModeJustCompleted(handler)
+	self.onMashModeJustCompleted = handler
 	return self
 end
 
@@ -846,6 +953,14 @@ function UipromptGroup:handleEvents(...)
 
 			if self.onHoldModeJustCompleted and prompt:hasHoldModeJustCompleted() then
 				self:onHoldModeJustCompleted(prompt, ...)
+			end
+
+			if self.onMashModeCompleted and prompt:hasMashModeCompleted() then
+				self:onMashModeCompleted(prompt, ...)
+			end
+
+			if self.onMashModeJustCompleted and prompt:hasMashModeJustCompleted() then
+				self:onMashModeJustCompleted(prompt, ...)
 			end
 
 			if self.onControlJustPressed and prompt:isControlJustPressed(0) then
