@@ -17,7 +17,7 @@ setmetatable(Class, {
 	__call = function(self)
 		self.__call = getmetatable(self).__call
 		self.__index = self
-		return setmetatable({super = super}, self)
+		return setmetatable({}, self)
 	end
 })
 
