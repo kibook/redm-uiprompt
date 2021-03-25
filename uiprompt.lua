@@ -10,16 +10,24 @@ local function toboolean(value)
 end
 
 -- Base class from which other classes are derived
+
 local Class = {}
 
+setmetatable(Class, {
+	__call = function(self)
+		self.__call = getmetatable(self).__call
+		self.__index = self
+		return setmetatable({super = super}, self)
+	end
+})
+
 function Class:new()
-	self.__index = self
-	return setmetatable({}, self)
+	return self()
 end
 
 --- System for automatically handling and cleaning up prompts and groups.
--- @table UipromptManager
-UipromptManager = Class:new()
+-- @type UipromptManager
+UipromptManager = Class()
 UipromptManager.prompts = {}
 UipromptManager.groups = {}
 
@@ -90,18 +98,22 @@ AddEventHandler("onResourceStop", function(resourceName)
 end)
 
 --- A single UI prompt.
--- @table Uiprompt
-Uiprompt = Class:new()
+-- @type Uiprompt
+Uiprompt = Class()
 
 --- Create a new UI prompt.
 -- @param controls An individual control or a table of controls associated with the prompt. The control name can be given as a string or hash.
 -- @param text The text label of the prompt.
+-- @param group An optional @{UipromptGroup} object to add this prompt to.
 -- @param enabled Whether the prompt is enabled and visible immediately. Default is true.
--- @param group An optional group ID to add the prompt to a prompt group.
 -- @return A new Uiprompt object.
 -- @usage local prompt = Uiprompt:new(`INPUT_DYNAMIC_SCENARIO`, "Use")
-function Uiprompt:new(controls, text, enabled, group)
-	local self = getmetatable(self).new(self)
+-- @usage local prompt = Uiprompt:new("INPUT_DYNAMIC_SCENARIO", "Use")
+-- @usage local prompt = Uiprompt:new({`INPUT_FRONTEND_UP`, `INPUT_FRONTEND_DOWN`}, "Up/Down")
+-- @usage local prompt = Uiprompt:new(`INPUT_DYNAMIC_SCENARIO`, "Use", promptGroup)
+-- @usage local prompt = Uiprompt:new(`INPUT_DYNAMIC_SCENARIO`, "Use", nil, false)
+function Uiprompt:new(controls, text, group, enabled)
+	local self = Class.new(self)
 
 	self.handle = PromptRegisterBegin()
 
@@ -122,7 +134,12 @@ function Uiprompt:new(controls, text, enabled, group)
 	self:setText(text)
 
 	if group then
-		PromptSetGroup(self.handle, group)
+		-- FIXME: This can be simplified once Uiprompt:addPrompt is removed.
+		if type(group) == "table" then
+			group:addPrompt_(self)
+		else
+			PromptSetGroup(self.handle, group)
+		end
 	end
 
 	if enabled == false then
@@ -136,6 +153,13 @@ function Uiprompt:new(controls, text, enabled, group)
 	end
 
 	return self
+end
+
+--- Get the raw handle of the prompt.
+-- @return The integer handle of the prompt.
+-- @usage local handle = prompt:getHandle()
+function Uiprompt:getHandle()
+	return self.handle
 end
 
 --- Get whether the prompt is active.
@@ -572,8 +596,8 @@ function Uiprompt:delete()
 end
 
 --- A group of UI prompts
--- @table UipromptGroup
-UipromptGroup = Class:new()
+-- @type UipromptGroup
+UipromptGroup = Class()
 
 --- Create a new UI prompt group
 -- @param text The text label for the prompt group
@@ -581,7 +605,7 @@ UipromptGroup = Class:new()
 -- @return A new UipromptGroup object
 -- @usage local promptGroup = UipromptGroup:new("Interact")
 function UipromptGroup:new(text, active)
-	local self = getmetatable(self).new(self)
+	local self = Class.new(self)
 
 	self.groupId = GetRandomIntInRange(0, 0xFFFFFF)
 	self.text = text
@@ -591,6 +615,13 @@ function UipromptGroup:new(text, active)
 	UipromptManager:addGroup(self)
 
 	return self
+end
+
+--- Get the raw group ID of the prompt group.
+-- @return The integer group ID of the group.
+-- @usage local groupId = promptGroup:getGroupId()
+function UipromptGroup:getGroupId()
+	return self.groupId
 end
 
 --- Display the prompt group. This must be called every frame.
@@ -623,24 +654,26 @@ function UipromptGroup:getPrompts()
 	return self.prompts
 end
 
---- Add a new prompt to the prompt group
--- @param controls An individual control or table of controls associated with the prompt.
--- @param text The text label of the prompt.
--- @param enabled Whether the prompt is enabled. Default is true.
--- @return The new Uiprompt object added to the group
--- @usage local prompt = promptGroup:addPrompt(`INPUT_DYNAMIC_SCENARIO`, "Use")
+--- This functions is deprecated. Specify the group in @{Uiprompt:new} instead.
 function UipromptGroup:addPrompt(controls, text, enabled)
-	local prompt = Uiprompt:new(controls, text, enabled, self.groupId)
+	local prompt = Uiprompt:new(controls, text, self.groupId, enabled)
+	table.insert(self.prompts, prompt)
+	return prompt
+end
+
+-- FIXME: Rename this when Uiprompt:addPrompt is removed.
+function UipromptGroup:addPrompt_(prompt)
+	PromptSetGroup(prompt:getHandle(), self.groupId)
 	table.insert(self.prompts, prompt)
 	return prompt
 end
 
 -- Do something for every prompt in the group
-function UipromptGroup:doForEachPrompt(func, args, callback)
+function UipromptGroup:doForEachPrompt(methodName, callback, ...)
 	local result = false
 
 	for _, prompt in ipairs(self.prompts) do
-		if func(prompt, table.unpack(args)) then
+		if prompt[methodName](prompt, ...) then
 			result = true
 
 			if callback then
@@ -660,7 +693,7 @@ end
 -- @usage if promptGroup:isJustPressed() then ... end
 -- @usage promptGroup:isJustPressed(function(prompt) ... end)
 function UipromptGroup:isJustPressed(callback)
-	return self:doForEachPrompt(Uiprompt.isJustPressed, {}, callback)
+	return self:doForEachPrompt("isJustPressed", callback)
 end
 
 --- Check if any prompts in the group were just released.
@@ -669,7 +702,7 @@ end
 -- @usage if promptGroup:isJustReleased() then ... end
 -- @usage promptGroup:isJustReleased(function(prompt) ... end)
 function UipromptGroup:isJustReleased(callback)
-	return self:doForEachPrompt(Uiprompt.isJustReleased, {}, callback)
+	return self:doForEachPrompt("isJustReleased", callback)
 end
 
 --- Check if any prompts in the group are pressed.
@@ -678,7 +711,7 @@ end
 -- @usage if promptGroup:isPressed() then ... end
 -- @usage promptGroup:isPressed(function(prompt) ... end)
 function UipromptGroup:isPressed(callback)
-	return self:doForEachPrompt(Uiprompt.isPressed, {}, callback)
+	return self:doForEachPrompt("isPressed", callback)
 end
 
 --- Check if any prompts in the group are released.
@@ -687,7 +720,7 @@ end
 -- @usage if promptGroup:isReleased() then ... end
 -- @usage promptGroup:isReleased(function(prompt) ... end)
 function UipromptGroup:isReleased(callback)
-	return self:doForEachPrompt(Uiprompt.isReleased, {}, callback)
+	return self:doForEachPrompt("isReleased", callback)
 end
 
 --- Check if any of the controls of any of the prompts in the group are pressed
@@ -697,7 +730,7 @@ end
 -- @usage if promptGroup:isControlPressed(0) then ... end
 -- @usage promptGroup:isControlPressed(0, function(prompt) ... end)
 function UipromptGroup:isControlPressed(padIndex, callback)
-	return self:doForEachPrompt(Uiprompt.doForEachControl, {IsControlPressed, padIndex}, callback)
+	return self:doForEachPrompt("doForEachControl", callback, IsControlPressed, padIndex)
 end
 
 --- Check if any of the controls of any of the prompts in the group are released
@@ -707,7 +740,7 @@ end
 -- @usage if promptGroup:isControlReleased(0) then ... end
 -- @usage promptGroup:isControlReleased(0, function(prompt) ... end)
 function UipromptGroup:isControlReleased(padIndex, callback)
-	return self:doForEachPrompt(Uiprompt.doForEachControl, {IsControlReleased, padIndex}, callback)
+	return self:doForEachPrompt("doForEachControl", callback, IsControlReleased, padIndex)
 end
 
 --- Check if any of the controls of any of the prompts in the group were just pressed
@@ -717,7 +750,7 @@ end
 -- @usage if promptGroup:isControlJustPressed(0) then ... end
 -- @usage if promptGroup:isControlJustPressed(0, function(prompt) ... end)
 function UipromptGroup:isControlJustPressed(padIndex, callback)
-	return self:doForEachPrompt(Uiprompt.doForEachControl, {IsControlJustPressed, padIndex}, callback)
+	return self:doForEachPrompt("doForEachControl", callback, IsControlJustPressed, padIndex)
 end
 
 --- Check if any of the controls of any of the prompts in the group were just released
@@ -727,7 +760,7 @@ end
 -- @usage if promptGroup:isControlJustReleased(0) then ... end
 -- @usage promptGroup:isControlJustReleased(0, function(prompt) ... end)
 function UipromptGroup:isControlJustReleased(padIndex, callback)
-	return self:doForEachPrompt(Uiprompt.doForEachControl, {IsControlJustReleased, padIndex}, callback)
+	return self:doForEachPrompt("doForEachControl", callback, IsControlJustReleased, padIndex)
 end
 
 --- Enable all control actions of all prompts in the group.
@@ -756,7 +789,7 @@ end
 -- @usage if promptGroup:isHoldModeRunning() then ... end
 -- @usage promptGroup:isHoldModeRunning(function(prompt) ... end)
 function UipromptGroup:isHoldModeRunning(callback)
-	return self:doForEachPrompt(Uiprompt.isHoldModeRunning, {}, callback)
+	return self:doForEachPrompt("isHoldModeRunning", {}, callback)
 end
 
 --- Check if the hold mode of any of the prompts in the group has completed.
@@ -765,7 +798,7 @@ end
 -- @usage if promptGroup:hasHoldModeCompleted() then ... end
 -- @usage promptGroup:hasHoldModeCompleted(function(prompt) ... end)
 function UipromptGroup:hasHoldModeCompleted(callback)
-	return self:doForEachPrompt(Uiprompt.hasHoldModeCompleted, {}, callback)
+	return self:doForEachPrompt("hasHoldModeCompleted", {}, callback)
 end
 
 --- Check if the hold mode of any of the prompts in the group has just completed.
@@ -774,7 +807,7 @@ end
 -- @usage if promptGroup:hasHoldModeJustCompleted() then ... end
 -- @usage promptGroup:hasHoldModeJustCompleted(function(prompt) ... end)
 function UipromptGroup:hasHoldModeJustCompleted(callback)
-	return self:doForEachPrompt(Uiprompt.hasHoldModeJustCompleted, {}, callback)
+	return self:doForEachPrompt("hasHoldModeJustCompleted", {}, callback)
 end
 
 --- Check if the mash mode of any of the prompts in the group has completed.
@@ -783,7 +816,7 @@ end
 -- @usage if promptGroup:hasMashModeCompleted() then ... end
 -- @usage promptGroup:hasMashModeCompleted(function(prompt) ... end)
 function UipromptGroup:hasMashModeCompleted(callback)
-	return self:doForEachPrompt(Uiprompt.hasMashModeCompleted, {}, callback)
+	return self:doForEachPrompt("hasMashModeCompleted", {}, callback)
 end
 
 --- Check if the mash mode of any of the prompts in the group has just completed.
@@ -792,7 +825,7 @@ end
 -- @usage if promptGroup:hasMashModeJustCompleted() then ... end
 -- @usage promptGroup:hasMashModeJustCompleted(function(prompt) ... end)
 function UipromptGroup:hasMashModeJustCompleted(callback)
-	return self:doForEachPrompt(Uiprompt.hasMashModeJustCompleted, {}, callback)
+	return self:doForEachPrompt("hasMashModeJustCompleted", {}, callback)
 end
 
 --- Set a handler that is executed when any prompt in the group was just pressed.

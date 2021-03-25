@@ -29,8 +29,9 @@
 
 <h2>Contents</h2>
 <ul>
-<li><a href="#Functions">Functions</a></li>
-<li><a href="#Tables">Tables</a></li>
+<li><a href="#Class_UipromptManager">Class UipromptManager </a></li>
+<li><a href="#Class_Uiprompt">Class Uiprompt </a></li>
+<li><a href="#Class_UipromptGroup">Class UipromptGroup </a></li>
 </ul>
 
 
@@ -47,6 +48,7 @@
   <li><a href="examples/multiple-controls.lua.html">multiple-controls.lua</a></li>
   <li><a href="examples/prompt-group.lua.html">prompt-group.lua</a></li>
   <li><a href="examples/single-prompt.lua.html">single-prompt.lua</a></li>
+  <li><a href="examples/subclasses.lua.html">subclasses.lua</a></li>
   <li><a href="examples/test.lua.html">test.lua</a></li>
 </ul>
 
@@ -59,15 +61,22 @@
 <p></p>
 
 
-<h2><a href="#Functions">Functions</a></h2>
+<h2><a href="#Class_UipromptManager">Class UipromptManager </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#UipromptManager:startEventThread">UipromptManager:startEventThread ()</a></td>
 	<td class="summary">Start an automatic event handling thread for all prompts and prompt groups.</td>
 	</tr>
+</table>
+<h2><a href="#Class_Uiprompt">Class Uiprompt </a></h2>
+<table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Uiprompt:new">Uiprompt:new (controls, text, enabled, group)</a></td>
+	<td class="name" nowrap><a href="#Uiprompt:new">Uiprompt:new (controls, text, group, enabled)</a></td>
 	<td class="summary">Create a new UI prompt.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:getHandle">Uiprompt:getHandle ()</a></td>
+	<td class="summary">Get the raw handle of the prompt.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:isActive">Uiprompt:isActive ()</a></td>
@@ -245,9 +254,16 @@
 	<td class="name" nowrap><a href="#Uiprompt:delete">Uiprompt:delete ()</a></td>
 	<td class="summary">Clean up the prompt</td>
 	</tr>
+</table>
+<h2><a href="#Class_UipromptGroup">Class UipromptGroup </a></h2>
+<table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:new">UipromptGroup:new (text, active)</a></td>
 	<td class="summary">Create a new UI prompt group</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:getGroupId">UipromptGroup:getGroupId ()</a></td>
+	<td class="summary">Get the raw group ID of the prompt group.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:setActiveThisFrame">UipromptGroup:setActiveThisFrame ()</a></td>
@@ -267,7 +283,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:addPrompt">UipromptGroup:addPrompt (controls, text, enabled)</a></td>
-	<td class="summary">Add a new prompt to the prompt group</td>
+	<td class="summary">This functions is deprecated.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:isJustPressed">UipromptGroup:isJustPressed (callback)</a></td>
@@ -402,28 +418,14 @@
 	<td class="summary">Clean up all prompts in the prompt group</td>
 	</tr>
 </table>
-<h2><a href="#Tables">Tables</a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" nowrap><a href="#UipromptManager">UipromptManager</a></td>
-	<td class="summary">System for automatically handling and cleaning up prompts and groups.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#Uiprompt">Uiprompt</a></td>
-	<td class="summary">A single UI prompt.</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#UipromptGroup">UipromptGroup</a></td>
-	<td class="summary">A group of UI prompts</td>
-	</tr>
-</table>
 
 <br/>
 <br/>
 
 
-    <h2><a name="Functions"></a>Functions</h2>
+    <h2><a name="Class_UipromptManager"></a>Class UipromptManager </h2>
 
+        System for automatically handling and cleaning up prompts and groups.
     <dl class="function">
     <dt>
     <a name = "UipromptManager:startEventThread"></a>
@@ -448,9 +450,14 @@
     </ul>
 
 </dd>
+</dl>
+    <h2><a name="Class_Uiprompt"></a>Class Uiprompt </h2>
+
+        A single UI prompt.
+    <dl class="function">
     <dt>
     <a name = "Uiprompt:new"></a>
-    <strong>Uiprompt:new (controls, text, enabled, group)</strong>
+    <strong>Uiprompt:new (controls, text, group, enabled)</strong>
     </dt>
     <dd>
     Create a new UI prompt.
@@ -464,11 +471,11 @@
         <li><span class="parameter">text</span>
          The text label of the prompt.
         </li>
+        <li><span class="parameter">group</span>
+         An optional <a href="index.html#UipromptGroup">UipromptGroup</a> object to add this prompt to.
+        </li>
         <li><span class="parameter">enabled</span>
          Whether the prompt is enabled and visible immediately. Default is true.
-        </li>
-        <li><span class="parameter">group</span>
-         An optional group ID to add the prompt to a prompt group.
         </li>
     </ul>
 
@@ -482,7 +489,34 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> prompt = Uiprompt:new(<span class="backtick">`INPUT_DYNAMIC_SCENARIO`</span>, <span class="string">"Use"</span>)</pre>
+        <li><pre class="example"><span class="keyword">local</span> prompt = Uiprompt:new(<span class="backtick">`INPUT_DYNAMIC_SCENARIO`</span>, <span class="string">"Use"</span>)</pre></li>
+        <li><pre class="example"><span class="keyword">local</span> prompt = Uiprompt:new(<span class="string">"INPUT_DYNAMIC_SCENARIO"</span>, <span class="string">"Use"</span>)</pre></li>
+        <li><pre class="example"><span class="keyword">local</span> prompt = Uiprompt:new({<span class="backtick">`INPUT_FRONTEND_UP`</span>, <span class="backtick">`INPUT_FRONTEND_DOWN`</span>}, <span class="string">"Up/Down"</span>)</pre></li>
+        <li><pre class="example"><span class="keyword">local</span> prompt = Uiprompt:new(<span class="backtick">`INPUT_DYNAMIC_SCENARIO`</span>, <span class="string">"Use"</span>, promptGroup)</pre></li>
+        <li><pre class="example"><span class="keyword">local</span> prompt = Uiprompt:new(<span class="backtick">`INPUT_DYNAMIC_SCENARIO`</span>, <span class="string">"Use"</span>, <span class="keyword">nil</span>, <span class="keyword">false</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:getHandle"></a>
+    <strong>Uiprompt:getHandle ()</strong>
+    </dt>
+    <dd>
+    Get the raw handle of the prompt.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The integer handle of the prompt.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> handle = prompt:getHandle()</pre>
     </ul>
 
 </dd>
@@ -1526,6 +1560,11 @@
     </ul>
 
 </dd>
+</dl>
+    <h2><a name="Class_UipromptGroup"></a>Class UipromptGroup </h2>
+
+        A group of UI prompts
+    <dl class="function">
     <dt>
     <a name = "UipromptGroup:new"></a>
     <strong>UipromptGroup:new (text, active)</strong>
@@ -1555,6 +1594,29 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><span class="keyword">local</span> promptGroup = UipromptGroup:new(<span class="string">"Interact"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "UipromptGroup:getGroupId"></a>
+    <strong>UipromptGroup:getGroupId ()</strong>
+    </dt>
+    <dd>
+    Get the raw group ID of the prompt group.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The integer group ID of the group.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> groupId = promptGroup:getGroupId()</pre>
     </ul>
 
 </dd>
@@ -1651,34 +1713,25 @@
     <strong>UipromptGroup:addPrompt (controls, text, enabled)</strong>
     </dt>
     <dd>
-    Add a new prompt to the prompt group
+    This functions is deprecated.  Specify the group in <a href="index.html#Uiprompt:new">Uiprompt:new</a> instead.
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">controls</span>
-         An individual control or table of controls associated with the prompt.
+
         </li>
         <li><span class="parameter">text</span>
-         The text label of the prompt.
+
         </li>
         <li><span class="parameter">enabled</span>
-         Whether the prompt is enabled. Default is true.
+
         </li>
     </ul>
 
-    <h3>Returns:</h3>
-    <ol>
-
-        The new Uiprompt object added to the group
-    </ol>
 
 
 
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example"><span class="keyword">local</span> prompt = promptGroup:addPrompt(<span class="backtick">`INPUT_DYNAMIC_SCENARIO`</span>, <span class="string">"Use"</span>)</pre>
-    </ul>
 
 </dd>
     <dt>
@@ -2562,59 +2615,13 @@
 
 </dd>
 </dl>
-    <h2><a name="Tables"></a>Tables</h2>
-
-    <dl class="function">
-    <dt>
-    <a name = "UipromptManager"></a>
-    <strong>UipromptManager</strong>
-    </dt>
-    <dd>
-    System for automatically handling and cleaning up prompts and groups.
-
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "Uiprompt"></a>
-    <strong>Uiprompt</strong>
-    </dt>
-    <dd>
-    A single UI prompt.
-
-
-
-
-
-
-
-</dd>
-    <dt>
-    <a name = "UipromptGroup"></a>
-    <strong>UipromptGroup</strong>
-    </dt>
-    <dd>
-    A group of UI prompts
-
-
-
-
-
-
-
-</dd>
-</dl>
 
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2021-03-18 23:00:41 </i>
+<i style="float:right;">Last updated 2021-03-25 00:08:32 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

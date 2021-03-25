@@ -1,10 +1,10 @@
 local promptGroup = UipromptGroup:new("Test")
 
-local prompt1 = promptGroup:addPrompt(`INPUT_DYNAMIC_SCENARIO`, "Test 1")
+local prompt1 = Uiprompt:new(`INPUT_DYNAMIC_SCENARIO`, "Test 1", promptGroup)
 prompt1:setHoldMode(true)
 prompt1.cooldown = 10
 
-local prompt2 = promptGroup:addPrompt(`INPUT_RELOAD`, "Test 2")
+local prompt2 = Uiprompt:new(`INPUT_RELOAD`, "Test 2", promptGroup)
 prompt2:setHoldMode(true)
 prompt2.cooldown = 5
 

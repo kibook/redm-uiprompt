@@ -1,16 +1,16 @@
 local promptGroup = UipromptGroup:new("Teleport")
 
-local guaPrompt = promptGroup:addPrompt(`INPUT_INTERACT_ANIMAL`, "To Guarma")
+local guaPrompt = Uiprompt:new(`INPUT_INTERACT_ANIMAL`, "To Guarma", promptGroup)
 guaPrompt:setHoldMode(true)
 guaPrompt.coords = vector3(1268.31, -6853.53, 43.31)
 guaPrompt.heading = 240.00
 
-local valPrompt = promptGroup:addPrompt(`INPUT_DYNAMIC_SCENARIO`, "To Valentine")
+local valPrompt = Uiprompt:new(`INPUT_DYNAMIC_SCENARIO`, "To Valentine", promptGroup)
 valPrompt:setHoldMode(true)
 valPrompt.coords = vector3(-183.61, 648.32, 113.57)
 valPrompt.heading = 68.20
 
-local rhoPrompt = promptGroup:addPrompt(`INPUT_RELOAD`, "To Rhodes")
+local rhoPrompt = Uiprompt:new(`INPUT_RELOAD`, "To Rhodes", promptGroup)
 rhoPrompt:setHoldMode(true)
 rhoPrompt.coords = vector3(1240.31, -1289.46, 76.91)
 rhoPrompt.heading = 301.61

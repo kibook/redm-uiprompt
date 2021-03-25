@@ -16,6 +16,7 @@ client_scripts {
 	--"examples/hold-mode-just-completed.lua",
 	--"examples/custom-thread.lua",
 	--"examples/cooldown.lua",
+	--"examples/subclasses.lua",
 	--"examples/test.lua",
 }
 ]]

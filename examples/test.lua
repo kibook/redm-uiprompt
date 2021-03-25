@@ -11,16 +11,16 @@ end
 local testGroup = UipromptGroup:new("Test group")
 
 -- Multiple controls for one prompt
-testGroup:addPrompt({`INPUT_FRONTEND_UP`, `INPUT_FRONTEND_DOWN`}, "Test 1")
+Uiprompt:new({`INPUT_FRONTEND_UP`, `INPUT_FRONTEND_DOWN`}, "Test 1", testGroup)
 
 -- Single control for a prompt
-testGroup:addPrompt(`INPUT_DYNAMIC_SCENARIO`, "Test 2")
+Uiprompt:new(`INPUT_DYNAMIC_SCENARIO`, "Test 2", testGroup)
 
 -- Specify the control name as a string, and enable hold mode for this prompt
-testGroup:addPrompt("INPUT_RELOAD", "Test 3"):setHoldMode(true)
+Uiprompt:new("INPUT_RELOAD", "Test 3", testGroup):setHoldMode(true)
 
 -- Event handler for a specific prompt
-testGroup:addPrompt(`INPUT_INTERACT_ANIMAL`, "Test 4"):setOnControlPressed(function(prompt)
+Uiprompt:new(`INPUT_INTERACT_ANIMAL`, "Test 4", testGroup):setOnControlPressed(function(prompt)
 	DrawText("(Single) " .. prompt:getText() .. " is pressed!", 0.5, 0.45)
 end)
 
