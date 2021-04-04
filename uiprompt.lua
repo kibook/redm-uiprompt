@@ -104,7 +104,7 @@ Uiprompt = Class()
 --- Create a new UI prompt.
 -- @param controls An individual control or a table of controls associated with the prompt. The control name can be given as a string or hash.
 -- @param text The text label of the prompt.
--- @param group An optional @{UipromptGroup} object to add this prompt to.
+-- @param group An optional @{UipromptGroup} object or integer ID of a group to add this prompt to.
 -- @param enabled Whether the prompt is enabled and visible immediately. Default is true.
 -- @return A new Uiprompt object.
 -- @usage local prompt = Uiprompt:new(`INPUT_DYNAMIC_SCENARIO`, "Use")
@@ -133,24 +133,17 @@ function Uiprompt:new(controls, text, group, enabled)
 
 	self:setText(text)
 
-	if group then
-		-- FIXME: This can be simplified once Uiprompt:addPrompt is removed.
-		if type(group) == "table" then
-			group:addPrompt_(self)
-		else
-			PromptSetGroup(self.handle, group)
-		end
-	end
-
 	if enabled == false then
 		self:setEnabledAndVisible(false)
 	end
 
-	PromptRegisterEnd(self.handle)
-
-	if not group then
+	if group then
+		self:setGroup(group)
+	else
 		UipromptManager:addPrompt(self)
 	end
+
+	PromptRegisterEnd(self.handle)
 
 	return self
 end
@@ -359,6 +352,20 @@ function Uiprompt:setText(text)
 	local str = CreateVarString(10, "LITERAL_STRING", text)
 	PromptSetText(self.handle, str)
 	self.text = text
+	return self
+end
+
+--- Add the prompt to a prompt group.
+-- @param group A @{UipromptGroup} object or integer ID of the group to add the prompt to.
+-- @usage prompt:setGroup(promptGroup)
+function Uiprompt:setGroup(group)
+	if type(group) == "table" then
+		group:addPrompt(self)
+	else
+		PromptSetGroup(self.handle, group)
+		UipromptManager:addPrompt(self)
+	end
+
 	return self
 end
 
@@ -591,7 +598,6 @@ end
 -- @usage prompt:delete()
 function Uiprompt:delete()
 	UipromptManager:removePrompt(self)
-
 	PromptDelete(self.handle)
 end
 
@@ -654,17 +660,19 @@ function UipromptGroup:getPrompts()
 	return self.prompts
 end
 
---- This functions is deprecated. Specify the group in @{Uiprompt:new} instead.
-function UipromptGroup:addPrompt(controls, text, enabled)
-	local prompt = Uiprompt:new(controls, text, self.groupId, enabled)
-	table.insert(self.prompts, prompt)
-	return prompt
-end
+--- Add an existing prompt to the group.
+-- @param prompt A @{Uiprompt} object or integer ID of a prompt to add to the group.
+-- @return The prompt that was added to the group.
+-- @usage promptGroup:addPrompt(prompt)
+function UipromptGroup:addPrompt(prompt)
+	if type(prompt) == "table" then
+		UipromptManager:removePrompt(prompt)
+		PromptSetGroup(prompt:getHandle(), self.groupId)
+		table.insert(self.prompts, prompt)
+	else
+		PromptSetGroup(prompt, self.groupId)
+	end
 
--- FIXME: Rename this when Uiprompt:addPrompt is removed.
-function UipromptGroup:addPrompt_(prompt)
-	PromptSetGroup(prompt:getHandle(), self.groupId)
-	table.insert(self.prompts, prompt)
 	return prompt
 end
 
