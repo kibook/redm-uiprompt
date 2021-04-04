@@ -12,6 +12,7 @@ client_scripts {
 	--"examples/single-prompt.lua",
 	--"examples/multiple-controls.lua",
 	--"examples/prompt-group.lua",
+	--"examples/standard-mode.lua",
 	--"examples/hold-mode.lua",
 	--"examples/hold-mode-just-completed.lua",
 	--"examples/custom-thread.lua",

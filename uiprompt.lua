@@ -240,6 +240,39 @@ function Uiprompt:isValid()
 	return PromptIsValid(self.handle)
 end
 
+--- Toggle standard mode on the prompt.
+-- @param toggle true to enable standard mode, false to disable.
+-- @usage prompt:setStandardMode(true)
+function Uiprompt:setStandardMode(toggle)
+	PromptSetStandardMode(self.handle, toggle)
+	return self
+end
+
+--- Check if the prompt's standard mode is completed.
+-- @usage if prompt:hasStandardModeCompleted() then ... end
+function Uiprompt:hasStandardModeCompleted()
+	return PromptHasStandardModeCompleted(self.handle)
+end
+
+--- Check if the prompt's standard mode was just completed.
+-- @usage if prompt:hasStandardModeJustCompleted() then ... end
+function Uiprompt:hasStandardModeJustCompleted()
+	if self.awaitingStandardModeEnd then
+		if not self:hasStandardModeCompleted() then
+			self.awaitingStandardModeEnd = false
+		end
+
+		return false
+	else
+		if self:hasStandardModeCompleted() then
+			self.awaitingStandardModeEnd = true
+			return true
+		else
+			return false
+		end
+	end
+end
+
 --- Get whether this prompt has hold mode enabled.
 -- @return true or false
 -- @usage if prompt:hasHoldMode() then ... end
@@ -495,6 +528,22 @@ function Uiprompt:setOnControlJustReleased(handler)
 	return self
 end
 
+--- Set a handler that is executed when the prompt's standard mode has completed.
+-- @param handler Handler function
+-- @usage prompt:setOnStandardModeCompleted(function(prompt, ...) ... end)
+function Uiprompt:setOnStandardModeCompleted(handler)
+	self.onStandardModeCompleted = handler
+	return self
+end
+
+--- Set a handler that is executed when the prompt's standard mode has just completed.
+-- @param handler Handler function
+-- @usage prompt:setOnStandardModeJustCompleted(function(prompt, ...) ... end)
+function Uiprompt:setOnStandardModeJustCompleted(handler)
+	self.onStandardModeJustCompleted = handler
+	return self
+end
+
 --- Set a handler that is executed when the prompt's hold mode is running.
 -- @param handler Handler function
 -- @usage prompt:setOnHoldModeRunning(function(prompt, ...) ... end)
@@ -554,6 +603,14 @@ function Uiprompt:handleEvents(...)
 
 		if self.onReleased and self:isReleased() then
 			self:onReleased(...)
+		end
+
+		if self.onStandardModeCompleted and self:hasStandardModeCompleted() then
+			self:onStandardModeCompleted()
+		end
+
+		if self.onStandardModeJustCompleted and self:hasStandardModeJustCompleted() then
+			self:onStandardModeJustCompleted()
 		end
 
 		if self.onHoldModeRunning and self:isHoldModeRunning() then
@@ -791,13 +848,29 @@ function UipromptGroup:disableControlAction(padIndex)
 	return self
 end
 
+--- Check if the standard mode of any of the prompts in the group has completed.
+-- @param callback An optional callback function that is executed for each prompt who's standard mode has completed.
+-- @usage if promptGroup:hasStandardModeCompleted() then ... end
+-- @usage promptGroup:hasStandardModeCompleted(function(prompt) ... end)
+function UipromptGroup:hasStandardModeCompleted(callback)
+	return self:doForEachPrompt("hasStandardModeCompleted", callback)
+end
+
+--- Check if the standard mode of any of the prompts in the group has just completed.
+-- @param callback An optional callback function that is executed for each prompt who's standard mode has just completed.
+-- @usage if promptGroup:hasStandardModeJustCompleted() then ... end
+-- @usage promptGroup:hasStandardModeJustCompleted(function(prompt) ... end)
+function UipromptGroup:hasStandardModeJustCompleted(callback)
+	return self:doForEachPrompt("hasStandardModeJustCompleted", callback)
+end
+
 --- Check if the hold mode of any of the prompts in the group is running.
 -- @param callback An optional callback function that is executed for each prompt who's hold mode is running.
 -- @return true or false
 -- @usage if promptGroup:isHoldModeRunning() then ... end
 -- @usage promptGroup:isHoldModeRunning(function(prompt) ... end)
 function UipromptGroup:isHoldModeRunning(callback)
-	return self:doForEachPrompt("isHoldModeRunning", {}, callback)
+	return self:doForEachPrompt("isHoldModeRunning", callback)
 end
 
 --- Check if the hold mode of any of the prompts in the group has completed.
@@ -806,7 +879,7 @@ end
 -- @usage if promptGroup:hasHoldModeCompleted() then ... end
 -- @usage promptGroup:hasHoldModeCompleted(function(prompt) ... end)
 function UipromptGroup:hasHoldModeCompleted(callback)
-	return self:doForEachPrompt("hasHoldModeCompleted", {}, callback)
+	return self:doForEachPrompt("hasHoldModeCompleted", callback)
 end
 
 --- Check if the hold mode of any of the prompts in the group has just completed.
@@ -815,7 +888,7 @@ end
 -- @usage if promptGroup:hasHoldModeJustCompleted() then ... end
 -- @usage promptGroup:hasHoldModeJustCompleted(function(prompt) ... end)
 function UipromptGroup:hasHoldModeJustCompleted(callback)
-	return self:doForEachPrompt("hasHoldModeJustCompleted", {}, callback)
+	return self:doForEachPrompt("hasHoldModeJustCompleted", callback)
 end
 
 --- Check if the mash mode of any of the prompts in the group has completed.
@@ -824,7 +897,7 @@ end
 -- @usage if promptGroup:hasMashModeCompleted() then ... end
 -- @usage promptGroup:hasMashModeCompleted(function(prompt) ... end)
 function UipromptGroup:hasMashModeCompleted(callback)
-	return self:doForEachPrompt("hasMashModeCompleted", {}, callback)
+	return self:doForEachPrompt("hasMashModeCompleted", callback)
 end
 
 --- Check if the mash mode of any of the prompts in the group has just completed.
@@ -833,7 +906,7 @@ end
 -- @usage if promptGroup:hasMashModeJustCompleted() then ... end
 -- @usage promptGroup:hasMashModeJustCompleted(function(prompt) ... end)
 function UipromptGroup:hasMashModeJustCompleted(callback)
-	return self:doForEachPrompt("hasMashModeJustCompleted", {}, callback)
+	return self:doForEachPrompt("hasMashModeJustCompleted", callback)
 end
 
 --- Set a handler that is executed when any prompt in the group was just pressed.
@@ -865,6 +938,22 @@ end
 -- @usage promptGroup:setOnReleased(function(group, prompt, ...) ... end)
 function UipromptGroup:setOnReleased(handler)
 	self.onReleased = handler
+	return self
+end
+
+--- Set a handler that is executed when any prompt in the group has completed its standard mode.
+-- @param handler Handler function
+-- @usage promptGroup:setOnStandardModeCompleted(function(group, prompt, ...) ... end)
+function UipromptGroup:setOnStandardModeCompleted(handler)
+	self.onStandardModeCompleted = handler
+	return self
+end
+
+--- Set a handler that is executed when any prompt in the group has just completed its standard mode.
+-- @param handler Handler function
+-- @usage promptGroup:setOnStandarDModeJustCompleted(function(group, prompt, ...) ... end)
+function UipromptGroup:setOnStandardModeJustCompleted(handler)
+	self.onStandardModeJustCompleted = handler
 	return self
 end
 
@@ -981,6 +1070,14 @@ function UipromptGroup:handleEvents(...)
 
 			if self.onReleased and prompt:isReleased() then
 				self:onReleased(prompt, ...)
+			end
+
+			if self.onStandardModeCompleted and prompt:hasStandardModeCompleted() then
+				self:onStandardModeCompleted(prompt, ...)
+			end
+
+			if self.onStandardModeJustCompleted and prompt:hasStandardModeJustCompleted() then
+				self:onStandardModeJustCompleted(prompt, ...)
 			end
 
 			if self.onHoldModeRunning and prompt:isHoldModeRunning() then

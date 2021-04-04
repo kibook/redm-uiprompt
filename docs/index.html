@@ -48,6 +48,7 @@
   <li><a href="examples/multiple-controls.lua.html">multiple-controls.lua</a></li>
   <li><a href="examples/prompt-group.lua.html">prompt-group.lua</a></li>
   <li><a href="examples/single-prompt.lua.html">single-prompt.lua</a></li>
+  <li><a href="examples/standard-mode.lua.html">standard-mode.lua</a></li>
   <li><a href="examples/subclasses.lua.html">subclasses.lua</a></li>
   <li><a href="examples/test.lua.html">test.lua</a></li>
 </ul>
@@ -121,6 +122,18 @@
 	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:isValid">Uiprompt:isValid ()</a></td>
 	<td class="summary">Check if prompt is valid.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:setStandardMode">Uiprompt:setStandardMode (toggle)</a></td>
+	<td class="summary">Toggle standard mode on the prompt.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:hasStandardModeCompleted">Uiprompt:hasStandardModeCompleted ()</a></td>
+	<td class="summary">Check if the prompt's standard mode is completed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:hasStandardModeJustCompleted">Uiprompt:hasStandardModeJustCompleted ()</a></td>
+	<td class="summary">Check if the prompt's standard mode was just completed.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:hasHoldMode">Uiprompt:hasHoldMode ()</a></td>
@@ -231,6 +244,14 @@
 	<td class="summary">Set a handler that is executed when any control associated with the prompt was just released.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:setOnStandardModeCompleted">Uiprompt:setOnStandardModeCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when the prompt's standard mode has completed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Uiprompt:setOnStandardModeJustCompleted">Uiprompt:setOnStandardModeJustCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when the prompt's standard mode has just completed.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#Uiprompt:setOnHoldModeRunning">Uiprompt:setOnHoldModeRunning (handler)</a></td>
 	<td class="summary">Set a handler that is executed when the prompt's hold mode is running.</td>
 	</tr>
@@ -330,6 +351,14 @@
 	<td class="summary">Disable all control actions of all prompts in the group.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:hasStandardModeCompleted">UipromptGroup:hasStandardModeCompleted (callback)</a></td>
+	<td class="summary">Check if the standard mode of any of the prompts in the group has completed.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:hasStandardModeJustCompleted">UipromptGroup:hasStandardModeJustCompleted (callback)</a></td>
+	<td class="summary">Check if the standard mode of any of the prompts in the group has just completed.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:isHoldModeRunning">UipromptGroup:isHoldModeRunning (callback)</a></td>
 	<td class="summary">Check if the hold mode of any of the prompts in the group is running.</td>
 	</tr>
@@ -364,6 +393,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:setOnReleased">UipromptGroup:setOnReleased (handler)</a></td>
 	<td class="summary">Set a handler that is executed when any prompt in the group is released.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:setOnStandardModeCompleted">UipromptGroup:setOnStandardModeCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when any prompt in the group has completed its standard mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#UipromptGroup:setOnStandardModeJustCompleted">UipromptGroup:setOnStandardModeJustCompleted (handler)</a></td>
+	<td class="summary">Set a handler that is executed when any prompt in the group has just completed its standard mode.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#UipromptGroup:setOnHoldModeRunning">UipromptGroup:setOnHoldModeRunning (handler)</a></td>
@@ -769,6 +806,66 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><span class="keyword">if</span> prompt:isValid() <span class="keyword">then</span> ... <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:setStandardMode"></a>
+    <strong>Uiprompt:setStandardMode (toggle)</strong>
+    </dt>
+    <dd>
+    Toggle standard mode on the prompt.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">toggle</span>
+         true to enable standard mode, false to disable.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">prompt:setStandardMode(<span class="keyword">true</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:hasStandardModeCompleted"></a>
+    <strong>Uiprompt:hasStandardModeCompleted ()</strong>
+    </dt>
+    <dd>
+    Check if the prompt's standard mode is completed.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">if</span> prompt:hasStandardModeCompleted() <span class="keyword">then</span> ... <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:hasStandardModeJustCompleted"></a>
+    <strong>Uiprompt:hasStandardModeJustCompleted ()</strong>
+    </dt>
+    <dd>
+    Check if the prompt's standard mode was just completed.
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">if</span> prompt:hasStandardModeJustCompleted() <span class="keyword">then</span> ... <span class="keyword">end</span></pre>
     </ul>
 
 </dd>
@@ -1427,6 +1524,54 @@
 
 </dd>
     <dt>
+    <a name = "Uiprompt:setOnStandardModeCompleted"></a>
+    <strong>Uiprompt:setOnStandardModeCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when the prompt's standard mode has completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">prompt:setOnStandardModeCompleted(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Uiprompt:setOnStandardModeJustCompleted"></a>
+    <strong>Uiprompt:setOnStandardModeJustCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when the prompt's standard mode has just completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">prompt:setOnStandardModeJustCompleted(<span class="keyword">function</span>(prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "Uiprompt:setOnHoldModeRunning"></a>
     <strong>Uiprompt:setOnHoldModeRunning (handler)</strong>
     </dt>
@@ -2066,6 +2211,56 @@
 
 </dd>
     <dt>
+    <a name = "UipromptGroup:hasStandardModeCompleted"></a>
+    <strong>UipromptGroup:hasStandardModeCompleted (callback)</strong>
+    </dt>
+    <dd>
+    Check if the standard mode of any of the prompts in the group has completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+         An optional callback function that is executed for each prompt who's standard mode has completed.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="keyword">if</span> promptGroup:hasStandardModeCompleted() <span class="keyword">then</span> ... <span class="keyword">end</span></pre></li>
+        <li><pre class="example">promptGroup:hasStandardModeCompleted(<span class="keyword">function</span>(prompt) ... <span class="keyword">end</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "UipromptGroup:hasStandardModeJustCompleted"></a>
+    <strong>UipromptGroup:hasStandardModeJustCompleted (callback)</strong>
+    </dt>
+    <dd>
+    Check if the standard mode of any of the prompts in the group has just completed.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+         An optional callback function that is executed for each prompt who's standard mode has just completed.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="keyword">if</span> promptGroup:hasStandardModeJustCompleted() <span class="keyword">then</span> ... <span class="keyword">end</span></pre></li>
+        <li><pre class="example">promptGroup:hasStandardModeJustCompleted(<span class="keyword">function</span>(prompt) ... <span class="keyword">end</span>)</pre></li>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "UipromptGroup:isHoldModeRunning"></a>
     <strong>UipromptGroup:isHoldModeRunning (callback)</strong>
     </dt>
@@ -2308,6 +2503,54 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example">promptGroup:setOnReleased(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "UipromptGroup:setOnStandardModeCompleted"></a>
+    <strong>UipromptGroup:setOnStandardModeCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when any prompt in the group has completed its standard mode.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">promptGroup:setOnStandardModeCompleted(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "UipromptGroup:setOnStandardModeJustCompleted"></a>
+    <strong>UipromptGroup:setOnStandardModeJustCompleted (handler)</strong>
+    </dt>
+    <dd>
+    Set a handler that is executed when any prompt in the group has just completed its standard mode.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handler</span>
+         Handler function
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">promptGroup:setOnStandarDModeJustCompleted(<span class="keyword">function</span>(group, prompt, ...) ... <span class="keyword">end</span>)</pre>
     </ul>
 
 </dd>
@@ -2652,7 +2895,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.3</a></i>
-<i style="float:right;">Last updated 2021-04-04 00:23:55 </i>
+<i style="float:right;">Last updated 2021-04-04 01:56:47 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
