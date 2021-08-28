@@ -1,0 +1,21 @@
+name: Build docs
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update repositories
+        run: sudo apt-get update -qq
+      - name: Install dependencies
+        run: sudo apt-get install -y -qq lua-doc
+      - name: make
+        run: make docs
+      - name: deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: docs
